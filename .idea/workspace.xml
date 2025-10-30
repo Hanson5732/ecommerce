@@ -4,65 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0afd84e9-493a-4af3-8e0c-2907d14352e8" name="Changes" comment="Rebuild Dao &amp; entity Finish.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/converter/ProductSnapshotConverter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dao/SubCategoryDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dao/SubCategoryDaoImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/AddressDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/AddressInputDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/AnswerAddDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/AnswerResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/AuthResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/CartDetailItemDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/CartResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/CommentAddDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/CommentDetailDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/CommentResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/CommentUpdateDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/CommentUserDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/ErrorResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/OrderCreateDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/OrderCreatedDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/OrderDetailResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/OrderItemCommentStatusDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/OrderItemListDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/OrderItemResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/OrderItemStatusUpdateDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/OrderListDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/OrderNotificationCountDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/OrderUpdateDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/ProductSnapshot.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/QuestionAddDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/QuestionResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/TokenRefreshDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/UserLoginDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/UserProfileUpdateDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/UserResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/UserSignupDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/exception/GlobalExceptionMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/CategoryResource.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/UserResource.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/AddressService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/AddressServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/CartService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/CartServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/CategoryService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/CategoryServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/CommentService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/CommentServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/OrderService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/OrderServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/QuestionService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/QuestionServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/TokenService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/TokenServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/UserServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/microprofile-config.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/entity/OrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/entity/OrderItem.java" afterDir="false" />
-    </list>
+    <list default="true" id="0afd84e9-493a-4af3-8e0c-2907d14352e8" name="Changes" comment="Rebuild Except JWT Auth function." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -155,7 +97,7 @@
       <updated>1761732755947</updated>
       <workItem from="1761732757245" duration="28000" />
       <workItem from="1761734612819" duration="166000" />
-      <workItem from="1761734786525" duration="28431000" />
+      <workItem from="1761734786525" duration="28842000" />
     </task>
     <task id="LOCAL-00001" summary="Rebuild Dao &amp; entity Finish.">
       <option name="closed" value="true" />
@@ -165,7 +107,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761799192562</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Rebuild Except JWT Auth function.">
+      <option name="closed" value="true" />
+      <created>1761834370374</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1761834370374</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -173,6 +123,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Rebuild Dao &amp; entity Finish." />
-    <option name="LAST_COMMIT_MESSAGE" value="Rebuild Dao &amp; entity Finish." />
+    <MESSAGE value="Rebuild Except JWT Auth function." />
+    <option name="LAST_COMMIT_MESSAGE" value="Rebuild Except JWT Auth function." />
   </component>
 </project>
