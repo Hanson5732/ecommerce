@@ -6,6 +6,7 @@ import com.rabbuy.ecommerce.dto.UserProfileUpdateDto;
 import com.rabbuy.ecommerce.dto.UserResponseDto;
 import com.rabbuy.ecommerce.dto.UserSignupDto;
 import jakarta.transaction.Transactional;
+import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.lang.JoseException;
 import jakarta.ws.rs.NotFoundException;
 
@@ -29,7 +30,7 @@ public interface UserService {
      * 也会更新 last_login
      */
     @Transactional
-    AuthResponseDto refreshUserToken(String refreshToken) throws JoseException, SecurityException;
+    AuthResponseDto refreshUserToken(String refreshToken) throws JoseException, SecurityException, MalformedClaimException;
 
     /**
      * 更新用户个人资料并返回新 Token

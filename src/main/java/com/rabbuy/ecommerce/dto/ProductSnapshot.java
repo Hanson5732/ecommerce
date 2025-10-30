@@ -1,4 +1,4 @@
-package com.rabbuy.ecommerce.dto; // 或 .model
+package com.rabbuy.ecommerce.dto;
 
 import java.math.BigDecimal;
 import java.util.UUID;

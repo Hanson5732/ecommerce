@@ -7,7 +7,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-// 导入 jose4j
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
@@ -121,32 +120,27 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public UUID validateRefreshToken(String refreshToken) throws JoseException, SecurityException {
         JwtConsumer jwtConsumer = new JwtConsumerBuilder()
-                .setRequireExpirationTime() // 必须有过期时间
-                .setAllowedClockSkewInSeconds(30) // 允许 30 秒时钟偏差
-                .setRequireSubject() // 必须有 'sub' (User ID)
-                .setExpectedIssuer(this.issuer) // 检查签发者
-                .setExpectedAudience("ecommerce-clients") // 检查受众
-                .setVerificationKey(getSigningKey()) // 验证签名
+                .setRequireExpirationTime()
+                .setAllowedClockSkewInSeconds(30)
+                .setRequireSubject()
+                .setExpectedIssuer(this.issuer)
+                .setExpectedAudience("ecommerce-clients")
+                .setVerificationKey(getSigningKey())
                 .build();
 
         try {
             // 验证并解析 claims
             JwtClaims claims = jwtConsumer.processToClaims(refreshToken);
-
-            // 验证是否为 'refresh' token
             String tokenType = claims.getStringClaimValue("token_type");
             if (!"refresh".equals(tokenType)) {
                 throw new SecurityException("Invalid token type. Expected 'refresh'.");
             }
-
-            // 返回 User ID
             return UUID.fromString(claims.getSubject());
 
         } catch (InvalidJwtException e) {
-            // 例如: token 过期、签名无效、issuer 不匹配
             throw new SecurityException("Refresh token is invalid or expired.", e);
         } catch (MalformedClaimException e) {
-            throw new RuntimeException(e);
+            throw new SecurityException("Refresh token claim is malformed.", e);
         }
     }
 }

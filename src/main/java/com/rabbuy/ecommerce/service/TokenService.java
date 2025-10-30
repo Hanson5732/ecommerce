@@ -5,6 +5,7 @@ import com.rabbuy.ecommerce.dto.UserResponseDto;
 import com.rabbuy.ecommerce.entity.User;
 import org.jose4j.lang.JoseException;
 import java.util.UUID;
+import org.jose4j.jwt.MalformedClaimException;
 
 public interface TokenService {
 
@@ -25,5 +26,5 @@ public interface TokenService {
      * @throws JoseException 如果 token 签名无效、过期或格式错误
      * @throws SecurityException 如果 token 不是一个 'refresh' 类型的 token
      */
-    UUID validateRefreshToken(String refreshToken) throws JoseException, SecurityException;
+    UUID validateRefreshToken(String refreshToken) throws JoseException, SecurityException, MalformedClaimException;
 }

@@ -10,24 +10,22 @@ import java.time.OffsetDateTime;
 public class OrderItem {
 
     @Id
-    @Column(name = "item_id", nullable = false, length = 255) // 使用 Django 中生成的 String ID 作为主键
+    @Column(name = "item_id", nullable = false, length = 255)
     private String itemId;
 
-    // 订单项状态: '0':Unpaid, '1':Paid, ..., '9':Hold
     @Column(name = "item_status", nullable = false, length = 2, columnDefinition = "VARCHAR(2) DEFAULT '0'")
     private String itemStatus = "0";
 
-    // 商品快照，存储为 JSON 字符串
+    @Lob
     @Column(name = "product", nullable = false, columnDefinition = "TEXT")
     @Convert(converter = ProductSnapshotConverter.class) // 应用转换器
     private ProductSnapshot product;
 
     @Column(name = "is_read", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private boolean isRead = false; // 消息是否已读
+    private boolean isRead = false;
 
-    // 多对一关系：多个 OrderItem 属于一个 Order
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false) // 外键列
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @Column(name = "created_time", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
@@ -36,11 +34,9 @@ public class OrderItem {
     @Column(name = "updated_time", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime updatedTime;
 
-    // JPA 需要无参构造函数
     public OrderItem() {
     }
 
-    // 生命周期回调
     @PrePersist
     protected void onCreate() {
         OffsetDateTime now = OffsetDateTime.now();
@@ -73,7 +69,6 @@ public class OrderItem {
 
     @Override
     public String toString() {
-        // 避免在 toString 中加载 product JSON 带来的复杂性或性能问题
         return "OrderItem " + itemId + " - Status: " + itemStatus;
     }
 }

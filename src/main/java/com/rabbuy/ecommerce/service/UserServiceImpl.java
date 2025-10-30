@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 import jakarta.security.enterprise.identitystore.PasswordHash;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
+import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.lang.JoseException; // 导入
 
 import java.time.OffsetDateTime; // 导入
@@ -128,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public AuthResponseDto refreshUserToken(String refreshToken) throws JoseException, SecurityException {
+    public AuthResponseDto refreshUserToken(String refreshToken) throws JoseException, SecurityException, MalformedClaimException {
         //
 
         // 1. 验证 token 并获取 user ID
