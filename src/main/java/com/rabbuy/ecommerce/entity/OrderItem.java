@@ -1,5 +1,7 @@
 package com.rabbuy.ecommerce.entity;
 
+import com.rabbuy.ecommerce.converter.ProductSnapshotConverter;
+import com.rabbuy.ecommerce.dto.ProductSnapshot;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 
@@ -16,9 +18,9 @@ public class OrderItem {
     private String itemStatus = "0";
 
     // 商品快照，存储为 JSON 字符串
-    @Lob
-    @Column(name = "product", nullable = false, columnDefinition = "TEXT") // 假设存储 JSON 的列类型是 TEXT
-    private String product; // 存储商品快照的 JSON 字符串
+    @Column(name = "product", nullable = false, columnDefinition = "TEXT")
+    @Convert(converter = ProductSnapshotConverter.class) // 应用转换器
+    private ProductSnapshot product;
 
     @Column(name = "is_read", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isRead = false; // 消息是否已读
@@ -58,8 +60,8 @@ public class OrderItem {
     public void setItemId(String itemId) { this.itemId = itemId; }
     public String getItemStatus() { return itemStatus; }
     public void setItemStatus(String itemStatus) { this.itemStatus = itemStatus; }
-    public String getProduct() { return product; }
-    public void setProduct(String product) { this.product = product; } // 可以添加 JSON 格式校验
+    public ProductSnapshot getProduct() { return product; }
+    public void setProduct(ProductSnapshot product) { this.product = product; }
     public boolean isRead() { return isRead; }
     public void setRead(boolean read) { isRead = read; }
     public Order getOrder() { return order; }
