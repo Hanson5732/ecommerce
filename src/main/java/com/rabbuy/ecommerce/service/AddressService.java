@@ -25,15 +25,20 @@ public interface AddressService {
 
     /**
      * 更新指定 ID 的地址
-     *
+     * @param addressId 要更新的地址 ID
+     * @param currentUserId 执行此操作的已登录用户的 ID
+     * @param addressDto 更新的数据
      * @throws NotFoundException 如果地址不存在
+     * @throws SecurityException 如果用户无权修改此地址
      */
-    AddressDto updateAddress(UUID addressId, AddressInputDto addressDto) throws NotFoundException;
+    AddressDto updateAddress(UUID addressId, UUID currentUserId, AddressInputDto addressDto) throws NotFoundException, SecurityException;
 
     /**
      * 删除指定 ID 的地址
-     *
+     * @param addressId 要删除的地址 ID
+     * @param currentUserId 执行此操作的已登录用户的 ID
      * @throws NotFoundException 如果地址不存在
+     * @throws SecurityException 如果用户无权删除此地址
      */
-    void deleteAddress(UUID addressId) throws NotFoundException;
+    void deleteAddress(UUID addressId, UUID currentUserId) throws NotFoundException, SecurityException;
 }

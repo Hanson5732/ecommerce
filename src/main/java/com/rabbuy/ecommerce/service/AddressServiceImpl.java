@@ -9,10 +9,9 @@ import com.rabbuy.ecommerce.entity.User;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException; // JAX-RS 异常
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -96,15 +95,19 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public AddressDto updateAddress(UUID addressId, AddressInputDto addressDto) throws NotFoundException {
+    public AddressDto updateAddress(UUID addressId, UUID currentUserId, AddressInputDto addressDto) throws NotFoundException, SecurityException {
         //
-        Address address = addressDao.findById(addressId)
+        Address address = addressDao.findById(addressId) //
                 .orElseThrow(() -> new NotFoundException("Address not found"));
 
-        // 业务规则 3：处理默认地址更新
+        // *** 安全检查：验证地址是否属于当前用户 ***
+        if (!address.getUser().getId().equals(currentUserId)) {
+            throw new SecurityException("User not authorized to update this address");
+        }
+
+        // 业务规则：处理默认地址更新
         if (addressDto.isDefault() != null && addressDto.isDefault() && !address.isDefault()) {
-            // 如果请求将此地址设为默认，且它当前不是默认
-            unsetOtherDefaults(address.getUser().getId(), addressId);
+            unsetOtherDefaults(currentUserId, addressId);
             address.setDefault(true);
         } else if (addressDto.isDefault() != null && !addressDto.isDefault()) {
             address.setDefault(false);
@@ -126,26 +129,28 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public void deleteAddress(UUID addressId) throws NotFoundException {
+    public void deleteAddress(UUID addressId, UUID currentUserId) throws NotFoundException, SecurityException {
         //
-        Address address = addressDao.findById(addressId)
+        Address address = addressDao.findById(addressId) //
                 .orElseThrow(() -> new NotFoundException("Address not found"));
 
-        UUID userId = address.getUser().getId();
+        // *** 安全检查：验证地址是否属于当前用户 ***
+        if (!address.getUser().getId().equals(currentUserId)) {
+            throw new SecurityException("User not authorized to delete this address");
+        }
+
         boolean wasDefault = address.isDefault();
 
         // 删除地址
-        addressDao.delete(address);
+        addressDao.delete(address); //
 
-        // 业务规则 4：如果删除的是默认地址，则需要设置一个新的默认地址
+        // 业务规则：如果删除的是默认地址，则需要设置一个新的默认地址
         if (wasDefault) {
-            // 查找剩余的地址
-            List<Address> remainingAddresses = addressDao.findByUserId(userId);
+            List<Address> remainingAddresses = addressDao.findByUserId(currentUserId); //
             if (!remainingAddresses.isEmpty()) {
-                // 将列表中的第一个（可能是按某种顺序排序的）设为新的默认地址
                 Address newDefault = remainingAddresses.get(0);
                 newDefault.setDefault(true);
-                addressDao.update(newDefault);
+                addressDao.update(newDefault); //
             }
         }
     }
@@ -157,15 +162,13 @@ public class AddressServiceImpl implements AddressService {
      */
     @Transactional
     private void unsetOtherDefaults(UUID userId, UUID excludeAddressId) {
-        // 找到当前的默认地址
-        Optional<Address> currentDefaultOpt = addressDao.findDefaultByUserId(userId);
+        // 查找该用户的所有非默认地址（此方法在 AddressDao 中）
+        List<Address> defaults = addressDao.findNonDefaultsByUserId(userId);
 
-        if (currentDefaultOpt.isPresent()) {
-            Address currentDefault = currentDefaultOpt.get();
-            // 如果当前默认地址不是我们要排除的地址
-            if (excludeAddressId == null || !currentDefault.getAddressId().equals(excludeAddressId)) {
-                currentDefault.setDefault(false);
-                addressDao.update(currentDefault);
+        for (Address addr : defaults) {
+            if (addr.isDefault() && (excludeAddressId == null || !addr.getAddressId().equals(excludeAddressId))) {
+                addr.setDefault(false);
+                addressDao.update(addr); //
             }
         }
     }
