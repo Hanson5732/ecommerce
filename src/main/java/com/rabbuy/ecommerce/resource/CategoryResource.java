@@ -1,29 +1,31 @@
 package com.rabbuy.ecommerce.resource;
 
-import com.rabbuy.ecommerce.dto.CategoryAdminDto;
-import com.rabbuy.ecommerce.dto.CategoryInputDto;
-import com.rabbuy.ecommerce.dto.CategoryNavDto;
+import com.rabbuy.ecommerce.dto.*;
+import com.rabbuy.ecommerce.service.SubCategoryService;
+import jakarta.annotation.security.RolesAllowed;
 import com.rabbuy.ecommerce.service.CategoryService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.*; // 导入 JAX-RS 注解
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response; // 导入 JAX-RS Response
+import jakarta.ws.rs.core.Response;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-// 1. @ApplicationScoped: 使其成为 CDI Bean
-// 2. @Path("/category"): 定义基础 URL 路径 (在 /api 之后，即 /api/category)
-//    /api 来自 HelloApplication.java
+
 @Path("/category")
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON) // 默认返回 JSON
 @Consumes(MediaType.APPLICATION_JSON) // 默认接收 JSON
 public class CategoryResource {
 
-    @Inject // 3. 注入业务逻辑层
+    @Inject
     private CategoryService categoryService;
+
+    @Inject
+    private SubCategoryService subCategoryService;
 
     /**
      * 获取导航栏分类
@@ -91,6 +93,112 @@ public class CategoryResource {
         return Response.noContent().build(); // 返回 204 No Content
     }
 
-    // TODO: Django 项目中还有 SubCategory 的视图，
-    // 它们应该在 SubCategoryService 和 SubCategoryResource 中实现。
+    /**
+     * 【新】获取二级分类导航（详情）
+     * 对应: path('sub/filter/<str:id>/', ...)
+     * 访问: GET /api/category/sub/filter/{id}
+     */
+    @GET
+    @Path("/sub/filter/{id}")
+    public Response getSubCategoryFilter(@PathParam("id") UUID id) {
+        SubCategoryDto dto = subCategoryService.getSubCategoryDetails(id);
+        return Response.ok(dto).build();
+    }
+
+    /**
+     * 【新】获取二级分类下的商品列表
+     * 对应: path('sub/product/', ...)
+     * 访问: GET /api/category/sub/product?subCategoryId=...&page=...
+     */
+    @GET
+    @Path("/sub/product")
+    public Response getSubCategoryProducts(
+            @QueryParam("subCategoryId") UUID subCategoryId,
+            @QueryParam("page") @DefaultValue("1") int page,
+            @QueryParam("pageSize") @DefaultValue("20") int pageSize,
+            @QueryParam("sortField") @DefaultValue("default") String sortField,
+            @QueryParam("sortMin") BigDecimal minPrice,
+            @QueryParam("sortMax") BigDecimal maxPrice) {
+
+        if (subCategoryId == null) {
+            throw new WebApplicationException("Query parameter 'subCategoryId' is required.", Response.Status.BAD_REQUEST);
+        }
+
+        PaginatedResult<SubCategoryProductDto> result = subCategoryService.getSubCategoryProducts(
+                subCategoryId, minPrice, maxPrice, sortField, page, pageSize
+        );
+        return Response.ok(result).build();
+    }
+
+    /**
+     * 【新】获取所有二级分类列表 (用于管理后台)
+     * 对应: path('sub/list/', ...)
+     * 访问: GET /api/category/sub/list
+     */
+    @GET
+    @Path("/sub/list")
+    @RolesAllowed("admin") //
+    public Response getAllSubCategories() {
+        List<SubCategoryDto> dtos = subCategoryService.getAllSubCategories();
+        return Response.ok(dtos).build();
+    }
+
+    /**
+     * 【新】分页获取所有二级分类 (用于管理后台)
+     * 对应: path('admin/sub/list/', ...)
+     * 访问: GET /api/category/admin/sub/list
+     */
+    @GET
+    @Path("/admin/sub/list")
+    @RolesAllowed("admin") //
+    public Response getAdminSubCategories(
+            @QueryParam("page") @DefaultValue("1") int page,
+            @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+
+        PaginatedResult<SubCategoryDto> result = subCategoryService.getAdminSubCategories(page, pageSize);
+        return Response.ok(result).build();
+    }
+
+    /**
+     * 【新】添加二级分类
+     * 对应: path('sub/add/', ...)
+     * 访问: POST /api/category/sub/add
+     */
+    @POST
+    @Path("/sub/add")
+    @RolesAllowed("admin") //
+    public Response addSubCategory(SubCategoryInputDto dto) {
+        SubCategoryDto newDto = subCategoryService.addSubCategory(dto);
+        return Response.status(Response.Status.CREATED).entity(newDto).build();
+    }
+
+    /**
+     * 【新】更新二级分类
+     * 对应: path('sub/update/', ...)
+     * 访问: PUT /api/category/sub/update/{id}
+     * (注意: Django 使用 PUT /sub/update/ 并从 body 获取 id，
+     * 我们使用更 RESTful 的 PUT /sub/update/{id})
+     */
+    @PUT
+    @Path("/sub/update/{id}")
+    @RolesAllowed("admin") //
+    public Response updateSubCategory(@PathParam("id") UUID id, SubCategoryInputDto dto) {
+        SubCategoryDto updatedDto = subCategoryService.updateSubCategory(id, dto);
+        return Response.ok(updatedDto).build();
+    }
+
+    /**
+     * 【新】删除二级分类
+     * 对应: path('sub/delete/', ...)
+     * 访问: DELETE /api/category/sub/delete/{id}
+     * (注意: Django 使用 DELETE /sub/delete/ 并从 body 获取 id，
+     * 我们使用更 RESTful 的 DELETE /sub/delete/{id})
+     */
+    @DELETE
+    @Path("/sub/delete/{id}")
+    @RolesAllowed("admin") //
+    public Response deleteSubCategory(@PathParam("id") UUID id) {
+        subCategoryService.deleteSubCategory(id);
+        return Response.noContent().build();
+    }
 }

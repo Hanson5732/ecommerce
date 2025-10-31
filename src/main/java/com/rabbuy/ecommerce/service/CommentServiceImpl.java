@@ -137,14 +137,19 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentResponseDto updateComment(String commentId, CommentUpdateDto commentDto) throws NotFoundException {
-        //
+    public CommentResponseDto updateComment(CommentUpdateInputDto updateInputDto) throws NotFoundException {
+        // 从 DTO 中提取 ID
+        String commentId = updateInputDto.id();
+        if (commentId == null) {
+            throw new IllegalArgumentException("Comment ID is required in update DTO");
+        }
+
         Comment comment = commentDao.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("Comment not found"));
 
         Product product = comment.getProduct();
         double oldRating = comment.getRating();
-        double newRating = commentDto.rating();
+        double newRating = updateInputDto.rating();
 
         // 1. 业务逻辑：重新计算产品评分
         if (product.getRatingNum() > 0) {
@@ -155,8 +160,9 @@ public class CommentServiceImpl implements CommentService {
 
         // 2. 更新评论
         comment.setRating(newRating);
-        comment.setCommentDesc(commentDto.commentDesc() != null ? commentDto.commentDesc() : "The user didn't say anything");
-        comment.setImages(commentDto.images() != null ? commentDto.images() : new ArrayList<>());
+        String newDesc = updateInputDto.commentDesc() != null ? updateInputDto.commentDesc() : "The user didn't say anything";
+        comment.setCommentDesc(newDesc);
+        comment.setImages(updateInputDto.images() != null ? updateInputDto.images() : new ArrayList<>());
         // (updated_time 由 @PreUpdate 自动设置)
         Comment updatedComment = commentDao.update(comment);
 

@@ -27,4 +27,12 @@ public interface OrderItemDao {
      * @return 更新的记录数
      */
     int markAllAsReadByUserId(UUID userId);
+
+    /**
+     * 统计指定用户和特定状态的订单项数量
+     * @param userId
+     * @param itemStatus
+     * @return
+     */
+    long countByUserIdAndItemStatus(UUID userId, String itemStatus);
 }

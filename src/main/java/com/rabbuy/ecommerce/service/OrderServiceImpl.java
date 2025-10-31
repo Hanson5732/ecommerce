@@ -333,4 +333,155 @@ public class OrderServiceImpl implements OrderService {
         //
         orderItemDao.markAllAsReadByUserId(userId);
     }
+
+    @Override
+    public HomeMessageCountDto getMessageCountsByUserId(UUID userId) {
+        long unpaid = orderItemDao.countByUserIdAndItemStatus(userId, "0");
+        long pending = orderItemDao.countByUserIdAndItemStatus(userId, "1");
+        long review = orderItemDao.countByUserIdAndItemStatus(userId, "5");
+        long refunding = orderItemDao.countByUserIdAndItemStatus(userId, "6");
+
+        return new HomeMessageCountDto(unpaid, pending, review, refunding);
+    }
+
+    /**
+     * 管理员：获取所有订单列表（分页）
+     * @param itemStatus
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PaginatedResult<OrderListDto> getAdminOrdersList(String itemStatus, int page, int pageSize) {
+        // Django 的 `get_all_orders_view` 与 `get_orders_view`
+        // 唯一的区别是它查询所有用户。
+
+        // 1. 获取相关 Order IDs (不限制 userId)
+        List<UUID> orderIds;
+        if (itemStatus != null && !itemStatus.isEmpty() && !"all".equals(itemStatus) && !"undefined".equals(itemStatus)) {
+            orderIds = orderDao.findOrderIdsByItemStatus(itemStatus);
+        } else {
+            orderIds = orderDao.findAllOrderIds();
+        }
+
+        if (orderIds.isEmpty()) {
+            return new PaginatedResult<>(new ArrayList<>(), 0, page, 0);
+        }
+
+        // 2. 批量获取所有相关的 Orders 及其 Items
+        List<Order> orders = orderDao.findOrdersWithItemsByOrderIds(orderIds);
+
+        // 3. 在内存中分组、排序 (与 getOrdersByUserId 的逻辑相同)
+        Map<UUID, OrderListDto> orderMap = new HashMap<>();
+
+        for (Order order : orders) {
+            BigDecimal totalAmount = BigDecimal.ZERO;
+            OffsetDateTime latestTime = null;
+            int maxStatus = -1;
+            List<OrderItemListDto> itemDtos = new ArrayList<>();
+
+            for (OrderItem item : order.getItems()) {
+                ProductSnapshot snapshot = item.getProduct();
+                if (snapshot == null) continue;
+
+                if (snapshot.getPrice() != null) {
+                    totalAmount = totalAmount.add(snapshot.getPrice().multiply(new BigDecimal(snapshot.getCount())));
+                }
+                if (latestTime == null || item.getCreatedTime().isAfter(latestTime)) {
+                    latestTime = item.getCreatedTime();
+                }
+                try {
+                    int statusNum = Integer.parseInt(item.getItemStatus());
+                    if (statusNum > maxStatus) {
+                        maxStatus = statusNum;
+                    }
+                } catch (NumberFormatException e) { /* 忽略 */ }
+
+                itemDtos.add(new OrderItemListDto(
+                        item.getItemId(), snapshot.getId(), item.getItemStatus(),
+                        snapshot.getName(), snapshot.getImage(),
+                        item.getCreatedTime(), item.getUpdatedTime(),
+                        snapshot.getPrice(), snapshot.getCount()
+                ));
+            }
+            if (latestTime == null && !order.getItems().isEmpty()) {
+                latestTime = order.getItems().get(0).getCreatedTime();
+            }
+
+            OrderListDto orderListDto = new OrderListDto(
+                    order.getOrderId().toString(), latestTime,
+                    String.valueOf(maxStatus), totalAmount, 0, itemDtos
+            );
+            orderMap.put(order.getOrderId(), orderListDto);
+        }
+
+        // 4. 排序 (按最新时间降序)
+        List<OrderListDto> sortedOrders = orderMap.values().stream()
+                .sorted(Comparator.comparing(OrderListDto::createdTime, Comparator.nullsLast(Comparator.reverseOrder())))
+                .collect(Collectors.toList());
+
+        // 5. 内存中分页
+        int totalItems = sortedOrders.size();
+        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+        int start = (page - 1) * pageSize;
+        int end = Math.min(start + pageSize, totalItems);
+
+        List<OrderListDto> paginatedData = (start < totalItems) ? sortedOrders.subList(start, end) : new ArrayList<>();
+
+        return new PaginatedResult<>(paginatedData, totalItems, page, totalPages);
+    }
+
+    /**
+     * 【新】管理员：获取订单详情
+     * 对应 Django: get_order_detail_view
+     *
+     */
+    @Override
+    public OrderDetailResponseDto getAdminOrderDetail(UUID orderId) throws NotFoundException {
+        // Django 的管理员视图和客户视图
+        // (get_order_detail_view vs get_order_view)
+        // 使用相同的逻辑和序列化器。
+        return getOrderDetails(orderId);
+    }
+
+    /**
+     * 【新】管理员：更新订单项状态
+     * 对应 Django: update_admin_item_status_view
+     *
+     */
+    @Override
+    @Transactional
+    public OrderItem updateAdminItemStatus(AdminOrderItemStatusUpdateDto updateDto) throws NotFoundException, IllegalArgumentException {
+        // 1. 获取订单项
+        OrderItem item = orderItemDao.findById(updateDto.itemId())
+                .orElseThrow(() -> new NotFoundException("Order item not found"));
+
+        String newStatus = updateDto.status();
+
+        // 2. 验证状态
+        if (newStatus == null || newStatus.trim().isEmpty()) {
+            throw new IllegalArgumentException("New status is required");
+        }
+
+        // 3. 业务逻辑 (退款时恢复库存)
+        //
+        if (("7".equals(newStatus) || "10".equals(newStatus)) && "6".equals(item.getItemStatus())) {
+            // "7" = 已退款, "10" = 已拒绝, "6" = 退款中
+            Product product = productDao.findById(item.getProduct().getId())
+                    .orElse(null); // 产品可能已被删除
+
+            if (product != null) {
+                // 退款成功 (7) 或 拒绝退款 (10)，恢复库存
+                int count = item.getProduct().getCount();
+                product.setStockQuantity(product.getStockQuantity() + count);
+                productDao.update(product);
+            }
+        }
+
+        // 4. 更新状态
+        item.setItemStatus(newStatus);
+
+        // 5. 持久化 (PreUpdate 会自动更新时间)
+        return orderItemDao.update(item);
+    }
 }

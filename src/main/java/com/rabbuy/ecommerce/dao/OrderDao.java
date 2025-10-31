@@ -43,4 +43,17 @@ public interface OrderDao {
      * (辅助 get_all_orders_view) 分页查找所有订单（管理员用）
      */
     PaginatedResult<Order> findAdminOrders(String query, int page, int pageSize);
+
+    /**
+     * 按订单项状态查找所有订单 ID (管理员)
+     * @param itemStatus
+     * @return
+     */
+    List<UUID> findOrderIdsByItemStatus(String itemStatus);
+
+    /**
+     * 查找所有订单 ID (管理员)
+     * @return
+     */
+    List<UUID> findAllOrderIds();
 }

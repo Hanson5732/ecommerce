@@ -50,5 +50,37 @@ public interface OrderService {
      */
     void markNotificationsAsRead(UUID userId);
 
-    // (Admin 方法可以稍后添加)
+    /**
+     * 获取首页的消息计数
+     * @param userId
+     * @return
+     */
+    HomeMessageCountDto getMessageCountsByUserId(UUID userId);
+
+    /**
+     * 管理员：获取所有订单列表（分页）
+     * @param itemStatus
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    PaginatedResult<OrderListDto> getAdminOrdersList(String itemStatus, int page, int pageSize);
+
+    /**
+     * 管理员：获取订单详情（与客户视图相同）
+     * @param orderId
+     * @return
+     * @throws NotFoundException
+     */
+    OrderDetailResponseDto getAdminOrderDetail(UUID orderId) throws NotFoundException;
+
+    /**
+     * 管理员：更新订单项状态（例如：发货、退款完成）
+     * @param updateDto
+     * @return
+     * @throws NotFoundException
+     * @throws IllegalArgumentException
+     */
+    OrderItem updateAdminItemStatus(AdminOrderItemStatusUpdateDto updateDto) throws NotFoundException, IllegalArgumentException;
+
 }

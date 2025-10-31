@@ -3,8 +3,9 @@ package com.rabbuy.ecommerce.service;
 import com.rabbuy.ecommerce.dto.CommentAddDto;
 import com.rabbuy.ecommerce.dto.CommentDetailDto;
 import com.rabbuy.ecommerce.dto.CommentResponseDto;
-import com.rabbuy.ecommerce.dto.CommentUpdateDto;
+import com.rabbuy.ecommerce.dto.CommentUpdateInputDto;
 import com.rabbuy.ecommerce.dto.PaginatedResult;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.UUID;
@@ -33,7 +34,8 @@ public interface CommentService {
      * 更新评论（包含更新产品评分的业务逻辑）
      *
      */
-    CommentResponseDto updateComment(String commentId, CommentUpdateDto commentDto) throws NotFoundException;
+    @Transactional
+    CommentResponseDto updateComment(CommentUpdateInputDto commentDto) throws NotFoundException;
 
     /**
      * 删除评论（包含更新产品评分的业务逻辑）

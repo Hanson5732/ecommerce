@@ -48,4 +48,13 @@ public class OrderItemDaoImpl implements OrderItemDao {
                 .setParameter("userId", userId)
                 .executeUpdate();
     }
+
+    @Override
+    public long countByUserIdAndItemStatus(UUID userId, String itemStatus) {
+        String jpql = "SELECT COUNT(i) FROM OrderItem i WHERE i.order.user.id = :userId AND i.itemStatus = :itemStatus";
+        return em.createQuery(jpql, Long.class)
+                .setParameter("userId", userId)
+                .setParameter("itemStatus", itemStatus)
+                .getSingleResult();
+    }
 }

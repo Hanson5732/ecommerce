@@ -122,4 +122,31 @@ public class OrderDaoImpl implements OrderDao {
 
         return new PaginatedResult<>(data, totalItems, page, totalPages);
     }
+
+    /**
+     * 按订单项状态查找所有订单 ID (管理员)
+     * @param itemStatus
+     * @return
+     */
+    @Override
+    public List<UUID> findOrderIdsByItemStatus(String itemStatus) {
+        // 我们需要查询 OrderItem 表，并按 itemStatus 过滤，
+        // 然后返回不重复的 Order ID 列表
+        String jpql = "SELECT DISTINCT i.order.orderId FROM OrderItem i WHERE i.itemStatus = :itemStatus";
+        return em.createQuery(jpql, UUID.class)
+                .setParameter("itemStatus", itemStatus)
+                .getResultList();
+    }
+
+    /**
+     * 查找所有订单 ID (管理员)
+     * @return
+     */
+    @Override
+    public List<UUID> findAllOrderIds() {
+        // 直接从 Order 表返回所有 ID
+        String jpql = "SELECT o.orderId FROM Order o";
+        return em.createQuery(jpql, UUID.class)
+                .getResultList();
+    }
 }
