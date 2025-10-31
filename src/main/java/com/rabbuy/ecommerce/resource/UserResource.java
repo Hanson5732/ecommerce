@@ -1,9 +1,6 @@
 package com.rabbuy.ecommerce.resource;
 
-import com.rabbuy.ecommerce.dto.AuthResponseDto;
-import com.rabbuy.ecommerce.dto.TokenRefreshDto;
-import com.rabbuy.ecommerce.dto.UserLoginDto;
-import com.rabbuy.ecommerce.dto.UserSignupDto;
+import com.rabbuy.ecommerce.dto.*;
 import com.rabbuy.ecommerce.service.UserService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -18,7 +15,6 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import java.util.UUID;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.SecurityContext;
-import com.rabbuy.ecommerce.dto.UserProfileUpdateDto;
 
 @Path("/user") // 基础路径 /api/user
 @ApplicationScoped
@@ -42,7 +38,7 @@ public class UserResource {
     public Response registerUser(UserSignupDto userDto) throws JoseException {
         // 业务异常 (IllegalArgumentException) 将被 GlobalExceptionMapper 捕获
         AuthResponseDto authResponse = userService.registerUser(userDto);
-        return Response.status(Response.Status.CREATED).entity(authResponse).build();
+        return Response.status(Response.Status.CREATED).entity(ApiResponseDto.success(authResponse)).build();
     }
 
     /**
@@ -55,7 +51,7 @@ public class UserResource {
     public Response loginUser(UserLoginDto loginDto) throws JoseException {
         // 业务异常 (SecurityException) 将被 GlobalExceptionMapper 捕获
         AuthResponseDto authResponse = userService.loginUser(loginDto);
-        return Response.ok(authResponse).build();
+        return Response.ok(ApiResponseDto.success(authResponse)).build();
     }
 
     /**
@@ -72,7 +68,7 @@ public class UserResource {
         }
         // 业务异常 (SecurityException, JoseException) 将被 GlobalExceptionMapper 捕获
         AuthResponseDto authResponse = userService.refreshUserToken(refreshDto.refresh());
-        return Response.ok(authResponse).build();
+        return Response.ok(ApiResponseDto.success(authResponse)).build();
     }
 
     /**
@@ -108,6 +104,6 @@ public class UserResource {
 
         // 授权通过，执行业务逻辑
         AuthResponseDto authResponse = userService.updateUserProfile(id, updateDto);
-        return Response.ok(authResponse).build();
+        return Response.ok(ApiResponseDto.success(authResponse)).build();
     }
 }

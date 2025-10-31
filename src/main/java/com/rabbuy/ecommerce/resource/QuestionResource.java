@@ -1,9 +1,6 @@
 package com.rabbuy.ecommerce.resource;
 
-import com.rabbuy.ecommerce.dto.AnswerAddDto;
-import com.rabbuy.ecommerce.dto.AnswerResponseDto;
-import com.rabbuy.ecommerce.dto.QuestionAddDto;
-import com.rabbuy.ecommerce.dto.QuestionResponseDto;
+import com.rabbuy.ecommerce.dto.*;
 import com.rabbuy.ecommerce.service.QuestionService;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,7 +34,7 @@ public class QuestionResource {
     @Path("/product/{productId}/list")
     public Response getProductQuestions(@PathParam("productId") UUID productId) {
         List<QuestionResponseDto> questions = questionService.getQuestionsByProductId(productId);
-        return Response.ok(questions).build();
+        return Response.ok(ApiResponseDto.success(questions)).build();
     }
 
     /**
@@ -54,7 +51,7 @@ public class QuestionResource {
 
         // 异常 (NotFound, IllegalArgument) 将被 GlobalExceptionMapper 捕获
         QuestionResponseDto newQuestion = questionService.addQuestion(productId, currentUserId, questionDto);
-        return Response.status(Response.Status.CREATED).entity(newQuestion).build();
+        return Response.status(Response.Status.CREATED).entity(ApiResponseDto.success(newQuestion)).build();
     }
 
     /**
@@ -71,6 +68,6 @@ public class QuestionResource {
 
         // 异常 (NotFound, IllegalArgument) 将被 GlobalExceptionMapper 捕获
         AnswerResponseDto newAnswer = questionService.addAnswer(questionId, currentUserId, answerDto);
-        return Response.status(Response.Status.CREATED).entity(newAnswer).build();
+        return Response.status(Response.Status.CREATED).entity(ApiResponseDto.success(newAnswer)).build();
     }
 }

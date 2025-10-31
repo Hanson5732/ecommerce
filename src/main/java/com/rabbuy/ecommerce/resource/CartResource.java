@@ -1,5 +1,6 @@
 package com.rabbuy.ecommerce.resource;
 
+import com.rabbuy.ecommerce.dto.ApiResponseDto;
 import com.rabbuy.ecommerce.dto.CartItem;
 import com.rabbuy.ecommerce.dto.CartResponseDto;
 import com.rabbuy.ecommerce.service.CartService;
@@ -40,15 +41,13 @@ public class CartResource {
         // NotFoundException 会被 GlobalExceptionMapper 自动捕获
         CartResponseDto cart = cartService.getCartByUserId(currentUserId);
 
-        return Response.ok(cart).build();
+        return Response.ok(ApiResponseDto.success(cart)).build();
     }
 
     /**
      * 保存（覆盖）当前用户的购物车
-     * 对应 Django: path('save/', views.save_cart_view, name="saveCart")
-     * 访问: POST /api/cart/save
-     * * @param cartItems 购物车项目列表，例如: [{"id": "uuid-...", "count": 2}]
-     * @return 200 OK
+     * @param cartItems
+     * @return
      */
     @POST
     @Path("/save")
@@ -62,12 +61,7 @@ public class CartResource {
         // NotFoundException 会被 GlobalExceptionMapper 自动捕获
         cartService.saveCart(currentUserId, cartItems);
 
-        // Django 的 save_cart_view 返回 Result.success()
         // 在 JAX-RS 中，我们通常返回 200 OK 或 204 No Content
-        return Response.ok().build();
+        return Response.ok(ApiResponseDto.success()).build();
     }
-
-    // Django 中的 add_cart_view 似乎是用于创建购物车的内部逻辑 (被注册逻辑调用)，
-    // 在 Java 中，这个逻辑已经在 UserService.registerUser 中通过 CartService.createEmptyCart 实现。
-    // 因此我们不需要为 /add 单独暴露 API。
 }

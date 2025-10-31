@@ -1,5 +1,6 @@
 package com.rabbuy.ecommerce.resource;
 
+import com.rabbuy.ecommerce.dto.ApiResponseDto;
 import com.rabbuy.ecommerce.dto.HomeMessageCountDto;
 import com.rabbuy.ecommerce.dto.ProductListDto;
 import com.rabbuy.ecommerce.service.OrderService;
@@ -42,7 +43,7 @@ public class HomeResource {
     public Response getNewProducts() {
         // Django view hardcodes limit to 4
         List<ProductListDto> products = productService.getLatestProducts(4);
-        return Response.ok(products).build();
+        return Response.ok(ApiResponseDto.success(products)).build();
     }
 
     /**
@@ -54,7 +55,7 @@ public class HomeResource {
     public Response getHotProducts() {
         // Django view hardcodes limit to 4
         List<ProductListDto> products = productService.getHotProducts(4);
-        return Response.ok(products).build();
+        return Response.ok(ApiResponseDto.success(products)).build();
     }
 
     /**
@@ -67,6 +68,6 @@ public class HomeResource {
     public Response getMessageCounts() {
         UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
         HomeMessageCountDto counts = orderService.getMessageCountsByUserId(currentUserId);
-        return Response.ok(counts).build();
+        return Response.ok(ApiResponseDto.success(counts)).build();
     }
 }

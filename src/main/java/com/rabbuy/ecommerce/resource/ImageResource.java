@@ -1,5 +1,6 @@
 package com.rabbuy.ecommerce.resource;
 
+import com.rabbuy.ecommerce.dto.ApiResponseDto;
 import com.rabbuy.ecommerce.dto.ImageUploadResponseDto;
 import com.rabbuy.ecommerce.service.ImageService;
 import jakarta.annotation.security.RolesAllowed;
@@ -51,7 +52,7 @@ public class ImageResource {
             ImageUploadResponseDto responseDto = imageService.uploadImage(filePart);
 
             // 4. 返回 201 Created (与 Django 保持一致)
-            return Response.status(Response.Status.CREATED).entity(responseDto).build();
+            return Response.status(Response.Status.CREATED).entity(ApiResponseDto.success(responseDto)).build();
 
         } catch (IllegalArgumentException e) {
             // 捕获来自 Service 的验证错误 (如大小、扩展名)

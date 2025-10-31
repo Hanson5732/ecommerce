@@ -3,6 +3,7 @@ package com.rabbuy.ecommerce.resource;
 import com.rabbuy.ecommerce.dto.AddressDto;
 import com.rabbuy.ecommerce.dto.AddressInputDto;
 import com.rabbuy.ecommerce.service.AddressService;
+import com.rabbuy.ecommerce.dto.ApiResponseDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -23,7 +24,7 @@ public class AddressResource {
     @Inject
     private AddressService addressService;
 
-    @Inject // 注入已认证的 JWT
+    @Inject
     private JsonWebToken jwtPrincipal;
 
     /**
@@ -36,7 +37,7 @@ public class AddressResource {
         // 从 JWT 获取用户 ID，而不是从查询参数
         UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
         List<AddressDto> addresses = addressService.getAddressesByUserId(currentUserId);
-        return Response.ok(addresses).build();
+        return Response.ok(ApiResponseDto.success(addresses)).build();
     }
 
     /**
@@ -50,7 +51,7 @@ public class AddressResource {
         UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
         // 业务异常 (IllegalStateException, NotFoundException) 将被 GlobalExceptionMapper 捕获
         AddressDto newAddress = addressService.addAddress(currentUserId, addressDto);
-        return Response.status(Response.Status.CREATED).entity(newAddress).build();
+        return Response.status(Response.Status.CREATED).entity(ApiResponseDto.success(newAddress)).build();
     }
 
     /**
@@ -64,7 +65,7 @@ public class AddressResource {
         UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
         // 业务异常 (NotFoundException, SecurityException) 将被 Service 层和 Mapper 捕获
         AddressDto updatedAddress = addressService.updateAddress(addressId, currentUserId, addressDto);
-        return Response.ok(updatedAddress).build();
+        return Response.ok(ApiResponseDto.success(updatedAddress)).build();
     }
 
     /**
@@ -78,6 +79,6 @@ public class AddressResource {
         UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
         // 业务异常 (NotFoundException, SecurityException) 将被 Service 层和 Mapper 捕获
         addressService.deleteAddress(addressId, currentUserId);
-        return Response.noContent().build(); // 返回 204
+        return Response.ok(ApiResponseDto.success("Address deleted successfully")).build();
     }
 }

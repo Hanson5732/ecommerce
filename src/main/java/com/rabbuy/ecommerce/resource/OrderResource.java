@@ -38,7 +38,7 @@ public class OrderResource {
     public Response createOrder(OrderCreateDto createDto) {
         // 异常 (NotFound, IllegalState) 将被 GlobalExceptionMapper 捕获
         OrderCreatedDto createdOrder = orderService.createOrder(createDto);
-        return Response.status(Response.Status.CREATED).entity(createdOrder).build();
+        return Response.status(Response.Status.CREATED).entity(ApiResponseDto.success(createdOrder)).build();
     }
 
     /**
@@ -52,7 +52,7 @@ public class OrderResource {
             throw new WebApplicationException("Query parameter 'id' is required.", Response.Status.BAD_REQUEST);
         }
         OrderDetailResponseDto orderDetails = orderService.getOrderDetails(orderId);
-        return Response.ok(orderDetails).build();
+        return Response.ok(ApiResponseDto.success(orderDetails)).build();
     }
 
     /**
@@ -64,7 +64,7 @@ public class OrderResource {
     @Path("/update")
     public Response updateOrder(OrderUpdateDto updateDto) {
         OrderDetailResponseDto updatedOrder = orderService.updateOrder(updateDto);
-        return Response.ok(updatedOrder).build();
+        return Response.ok(ApiResponseDto.success(updatedOrder)).build();
     }
 
     /**
@@ -85,7 +85,7 @@ public class OrderResource {
 
         // Django 视图从 GET.get('userId') 获取，我们从 JWT 获取
         PaginatedResult<OrderListDto> results = orderService.getOrdersByUserId(currentUserId, itemStatus, page, pageSize);
-        return Response.ok(results).build();
+        return Response.ok(ApiResponseDto.success(results)).build();
     }
 
     /**
@@ -101,7 +101,7 @@ public class OrderResource {
         // 返回更新后的 DTO（或仅返回状态）
         // 为了与 Django 视图的响应保持一致，我们构造一个简单的 DTO
         var responseDto = new OrderItemStatusUpdateDto(updatedItem.getItemId(), null, updatedItem.getItemStatus());
-        return Response.ok(responseDto).build();
+        return Response.ok(ApiResponseDto.success(responseDto)).build();
     }
 
     /**
@@ -116,7 +116,7 @@ public class OrderResource {
             throw new WebApplicationException("Query parameter 'id' (item_id) is required.", Response.Status.BAD_REQUEST);
         }
         OrderItemCommentStatusDto itemStatus = orderService.getOrderItemForComment(itemId);
-        return Response.ok(itemStatus).build();
+        return Response.ok(ApiResponseDto.success(itemStatus)).build();
     }
 
     /**
@@ -128,7 +128,7 @@ public class OrderResource {
     public Response getNotificationCount() {
         UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
         OrderNotificationCountDto count = orderService.getNotificationCount(currentUserId);
-        return Response.ok(count).build();
+        return Response.ok(ApiResponseDto.success(count)).build();
     }
 
     /**
@@ -140,7 +140,7 @@ public class OrderResource {
     public Response markNotificationsAsRead() {
         UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
         orderService.markNotificationsAsRead(currentUserId);
-        return Response.ok().build(); // 返回 200 OK
+        return Response.ok(ApiResponseDto.success()).build();
     }
 
     /**

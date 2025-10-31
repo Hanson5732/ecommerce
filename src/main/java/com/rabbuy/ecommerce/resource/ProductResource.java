@@ -25,8 +25,8 @@ public class ProductResource {
     @Inject
     private ProductService productService;
 
-    @Inject
-    private JsonWebToken jwtPrincipal;
+//    @Inject
+//    private JsonWebToken jwtPrincipal;
 
     /**
      * 获取商品详情
@@ -38,7 +38,7 @@ public class ProductResource {
     public Response getProductDetail(@PathParam("id") UUID productId) {
         // NotFoundException 会被 GlobalExceptionMapper 自动捕获
         ProductDetailDto productDetail = productService.getProductDetails(productId);
-        return Response.ok(productDetail).build();
+        return Response.ok(ApiResponseDto.success(productDetail)).build();
     }
 
     /**
@@ -55,7 +55,7 @@ public class ProductResource {
             throw new WebApplicationException("Missing product ID parameter", Response.Status.BAD_REQUEST);
         }
         ProductStatusDto status = productService.getProductStatus(productId);
-        return Response.ok(status).build();
+        return Response.ok(ApiResponseDto.success(status)).build();
     }
 
     /**
@@ -81,7 +81,7 @@ public class ProductResource {
         );
 
         PaginatedResult<ProductListDto> results = productService.searchProducts(criteria);
-        return Response.ok(results).build();
+        return Response.ok(ApiResponseDto.success(results)).build();
     }
 
     /**
@@ -101,7 +101,7 @@ public class ProductResource {
         }
 
         List<ProductListDto> recommendations = productService.getProductRecommendations(productId, name, 4); // Django 限制 4 个
-        return Response.ok(recommendations).build();
+        return Response.ok(ApiResponseDto.success(recommendations)).build();
     }
 
     /**
@@ -115,7 +115,7 @@ public class ProductResource {
     @RolesAllowed("admin") //
     public Response getStockStatus() {
         ProductStockStatus status = productService.getProductStockStatus();
-        return Response.ok(status).build();
+        return Response.ok(ApiResponseDto.success(status)).build();
     }
 
     /**
@@ -139,7 +139,7 @@ public class ProductResource {
         response.put("products", result.data());
         response.put("total", result.totalItems());
 
-        return Response.ok(response).build();
+        return Response.ok(ApiResponseDto.success(response)).build();
     }
 
     /**
@@ -153,7 +153,7 @@ public class ProductResource {
     @RolesAllowed("admin") //
     public Response getAdminProductDetail(@PathParam("id") UUID productId) {
         ProductDetailDto productDetail = productService.getAdminProductDetails(productId);
-        return Response.ok(productDetail).build();
+        return Response.ok(ApiResponseDto.success(productDetail)).build();
     }
 
     /**
@@ -170,7 +170,7 @@ public class ProductResource {
         // Django 视图 返回 {'id': ...}
         Map<String, UUID> response = new HashMap<>();
         response.put("id", newProduct.id());
-        return Response.status(Response.Status.CREATED).entity(response).build();
+        return Response.status(Response.Status.CREATED).entity(ApiResponseDto.success(response)).build();
     }
 
     /**
@@ -184,7 +184,7 @@ public class ProductResource {
     @RolesAllowed("admin") //
     public Response updateProduct(@PathParam("id") UUID productId, ProductAdminInputDto dto) {
         productService.updateProduct(productId, dto);
-        return Response.ok().build();
+        return Response.ok(ApiResponseDto.success()).build();
     }
 
     /**
@@ -198,6 +198,6 @@ public class ProductResource {
     @RolesAllowed("admin") //
     public Response deleteProduct(@PathParam("id") UUID productId) {
         productService.deleteProduct(productId);
-        return Response.ok().build();
+        return Response.ok(ApiResponseDto.success()).build();
     }
 }

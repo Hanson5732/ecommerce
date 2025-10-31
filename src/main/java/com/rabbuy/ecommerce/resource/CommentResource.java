@@ -45,7 +45,7 @@ public class CommentResource {
         PaginatedResult<CommentResponseDto> results = commentService.getProductComments(
                 productId, ratingFilter, hasImageOnly, page, pageSize
         );
-        return Response.ok(results).build();
+        return Response.ok(ApiResponseDto.success(results)).build();
     }
 
     /**
@@ -59,7 +59,7 @@ public class CommentResource {
     public Response addComment(CommentAddDto commentDto) {
         // 异常 (NotFound) 将被 GlobalExceptionMapper 捕获
         CommentResponseDto newComment = commentService.addComment(commentDto);
-        return Response.status(Response.Status.CREATED).entity(newComment).build();
+        return Response.status(Response.Status.CREATED).entity(ApiResponseDto.success(newComment)).build();
     }
 
     /**
@@ -74,7 +74,7 @@ public class CommentResource {
             throw new WebApplicationException("Query parameter 'id' (comment_id) is required.", Response.Status.BAD_REQUEST);
         }
         CommentDetailDto comment = commentService.getCommentById(commentId);
-        return Response.ok(comment).build();
+        return Response.ok(ApiResponseDto.success(comment)).build();
     }
 
     /**
@@ -92,7 +92,7 @@ public class CommentResource {
         }
 
         CommentResponseDto updatedComment = commentService.updateComment(updateInputDto);
-        return Response.ok(updatedComment).build();
+        return Response.ok(ApiResponseDto.success(updatedComment)).build();
     }
 
     /**
@@ -108,6 +108,6 @@ public class CommentResource {
             throw new WebApplicationException("Request body with 'id' is required.", Response.Status.BAD_REQUEST);
         }
         commentService.deleteComment(deleteDto.id());
-        return Response.noContent().build(); // 204
+        return Response.ok(ApiResponseDto.success()).build();
     }
 }

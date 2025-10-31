@@ -36,7 +36,7 @@ public class CategoryResource {
     @Path("/nav")
     public Response getNavigationCategories() {
         List<CategoryNavDto> categories = categoryService.getNavigationCategories();
-        return Response.ok(categories).build(); // 返回 200 OK 和列表
+        return Response.ok(ApiResponseDto.success(categories)).build();
     }
 
     /**
@@ -51,7 +51,7 @@ public class CategoryResource {
                                        @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
         // TODO: 当前 Service 层未完全实现分页，但 API 接口已准备好
         List<CategoryAdminDto> categories = categoryService.getAdminCategories(page, pageSize);
-        return Response.ok(categories).build();
+        return Response.ok(ApiResponseDto.success(categories)).build();
     }
 
     /**
@@ -66,7 +66,7 @@ public class CategoryResource {
         // Service 层会处理异常，ExceptionMapper 会捕获它们
         CategoryAdminDto newCategory = categoryService.addCategory(categoryDto);
         // 返回 201 Created 状态和新创建的资源
-        return Response.status(Response.Status.CREATED).entity(newCategory).build();
+        return Response.status(Response.Status.CREATED).entity(ApiResponseDto.success(newCategory)).build();
     }
 
     /**
@@ -78,7 +78,7 @@ public class CategoryResource {
     @Path("/update/{id}") // @PathParam 用于从 URL 路径获取参数
     public Response updateCategory(@PathParam("id") UUID id, CategoryInputDto categoryDto) {
         CategoryAdminDto updatedCategory = categoryService.updateCategory(id, categoryDto);
-        return Response.ok(updatedCategory).build(); // 返回 200 OK 和更新后的资源
+        return Response.ok(ApiResponseDto.success(updatedCategory)).build();
     }
 
     /**
@@ -90,25 +90,30 @@ public class CategoryResource {
     @Path("/delete/{id}")
     public Response deleteCategory(@PathParam("id") UUID id) {
         categoryService.deleteCategory(id);
-        return Response.noContent().build(); // 返回 204 No Content
+        return Response.ok(ApiResponseDto.success("Category deleted successfully")).build();
     }
 
     /**
-     * 【新】获取二级分类导航（详情）
-     * 对应: path('sub/filter/<str:id>/', ...)
-     * 访问: GET /api/category/sub/filter/{id}
+     * 获取二级分类导航（详情）
+     * @param id
+     * @return
      */
     @GET
     @Path("/sub/filter/{id}")
     public Response getSubCategoryFilter(@PathParam("id") UUID id) {
         SubCategoryDto dto = subCategoryService.getSubCategoryDetails(id);
-        return Response.ok(dto).build();
+        return Response.ok(ApiResponseDto.success(dto)).build();
     }
 
     /**
-     * 【新】获取二级分类下的商品列表
-     * 对应: path('sub/product/', ...)
-     * 访问: GET /api/category/sub/product?subCategoryId=...&page=...
+     * 获取二级分类下的商品列表
+     * @param subCategoryId
+     * @param page
+     * @param pageSize
+     * @param sortField
+     * @param minPrice
+     * @param maxPrice
+     * @return
      */
     @GET
     @Path("/sub/product")
@@ -127,26 +132,26 @@ public class CategoryResource {
         PaginatedResult<SubCategoryProductDto> result = subCategoryService.getSubCategoryProducts(
                 subCategoryId, minPrice, maxPrice, sortField, page, pageSize
         );
-        return Response.ok(result).build();
+        return Response.ok(ApiResponseDto.success(result)).build();
     }
 
     /**
-     * 【新】获取所有二级分类列表 (用于管理后台)
-     * 对应: path('sub/list/', ...)
-     * 访问: GET /api/category/sub/list
+     * 获取所有二级分类列表 (用于管理后台)
+     * @return
      */
     @GET
     @Path("/sub/list")
     @RolesAllowed("admin") //
     public Response getAllSubCategories() {
         List<SubCategoryDto> dtos = subCategoryService.getAllSubCategories();
-        return Response.ok(dtos).build();
+        return Response.ok(ApiResponseDto.success(dtos)).build();
     }
 
     /**
-     * 【新】分页获取所有二级分类 (用于管理后台)
-     * 对应: path('admin/sub/list/', ...)
-     * 访问: GET /api/category/admin/sub/list
+     * 分页获取所有二级分类 (用于管理后台)
+     * @param page
+     * @param pageSize
+     * @return
      */
     @GET
     @Path("/admin/sub/list")
@@ -156,49 +161,46 @@ public class CategoryResource {
             @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
 
         PaginatedResult<SubCategoryDto> result = subCategoryService.getAdminSubCategories(page, pageSize);
-        return Response.ok(result).build();
+        return Response.ok(ApiResponseDto.success(result)).build();
     }
 
     /**
-     * 【新】添加二级分类
-     * 对应: path('sub/add/', ...)
-     * 访问: POST /api/category/sub/add
+     * 添加二级分类
+     * @param dto
+     * @return
      */
     @POST
     @Path("/sub/add")
     @RolesAllowed("admin") //
     public Response addSubCategory(SubCategoryInputDto dto) {
         SubCategoryDto newDto = subCategoryService.addSubCategory(dto);
-        return Response.status(Response.Status.CREATED).entity(newDto).build();
+        return Response.status(Response.Status.CREATED).entity(ApiResponseDto.success(newDto)).build();
     }
 
     /**
-     * 【新】更新二级分类
-     * 对应: path('sub/update/', ...)
-     * 访问: PUT /api/category/sub/update/{id}
-     * (注意: Django 使用 PUT /sub/update/ 并从 body 获取 id，
-     * 我们使用更 RESTful 的 PUT /sub/update/{id})
+     * 更新二级分类
+     * @param id
+     * @param dto
+     * @return
      */
     @PUT
     @Path("/sub/update/{id}")
     @RolesAllowed("admin") //
     public Response updateSubCategory(@PathParam("id") UUID id, SubCategoryInputDto dto) {
         SubCategoryDto updatedDto = subCategoryService.updateSubCategory(id, dto);
-        return Response.ok(updatedDto).build();
+        return Response.ok(ApiResponseDto.success(updatedDto)).build();
     }
 
     /**
-     * 【新】删除二级分类
-     * 对应: path('sub/delete/', ...)
-     * 访问: DELETE /api/category/sub/delete/{id}
-     * (注意: Django 使用 DELETE /sub/delete/ 并从 body 获取 id，
-     * 我们使用更 RESTful 的 DELETE /sub/delete/{id})
+     * 删除二级分类
+     * @param id
+     * @return
      */
     @DELETE
     @Path("/sub/delete/{id}")
     @RolesAllowed("admin") //
     public Response deleteSubCategory(@PathParam("id") UUID id) {
         subCategoryService.deleteSubCategory(id);
-        return Response.noContent().build();
+        return Response.ok(ApiResponseDto.success("Subcategory deleted successfully")).build();
     }
 }
