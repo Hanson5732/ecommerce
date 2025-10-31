@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="ecommerce:war exploded" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0afd84e9-493a-4af3-8e0c-2907d14352e8" name="Changes" comment="Rebuild Except JWT Auth function.">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/AddressResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/AddressResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/CartResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/CartResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/CategoryResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/CategoryResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/CommentResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/CommentResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/HomeResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/HomeResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/ImageResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/ImageResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/OrderResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/OrderResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/ProductResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/ProductResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/QuestionResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/QuestionResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/UserResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/UserResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/microprofile-config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/microprofile-config.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/payara-web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/payara-web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +33,13 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="LogFilters">
+    <option name="FILTER_ERRORS" value="false" />
+    <option name="FILTER_WARNINGS" value="false" />
+    <option name="FILTER_INFO" value="true" />
+    <option name="FILTER_DEBUG" value="true" />
+    <option name="CUSTOM_FILTER" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -51,6 +57,10 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Maven.ecommerce [clean].executor": "Run",
+    "Maven.ecommerce [deploy].executor": "Run",
+    "Maven.ecommerce [package].executor": "Run",
+    "Payara Server.Payara 6.2025.10.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -64,6 +74,11 @@
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
   }
 }]]></component>
   <component name="RunManager">
@@ -85,6 +100,21 @@
       <RunnerSettings RunnerId="Debug">
         <option name="DEBUG_PORT" value="9009" />
       </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
       <method v="2">
         <option name="Make" enabled="true" />
         <option name="BuildArtifacts" enabled="true">
@@ -96,6 +126,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
+        <option value="jdk-1.8.0_402-corretto-1.8.0_402-4caba194b151-ae57be32" />
         <option value="jdk-17.0.10-corretto-17.0.10-4caba194b151-5cd809f4" />
       </set>
     </attachedChunks>
@@ -111,7 +142,8 @@
       <workItem from="1761732757245" duration="28000" />
       <workItem from="1761734612819" duration="166000" />
       <workItem from="1761734786525" duration="36343000" />
-      <workItem from="1761873061810" duration="16552000" />
+      <workItem from="1761873061810" duration="19434000" />
+      <workItem from="1761930761867" duration="2243000" />
     </task>
     <task id="LOCAL-00001" summary="Rebuild Dao &amp; entity Finish.">
       <option name="closed" value="true" />
