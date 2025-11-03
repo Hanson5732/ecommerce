@@ -22,7 +22,9 @@ public class GlobalExceptionMapper implements ExceptionMapper<Throwable> {
             WebApplicationException webEx = (WebApplicationException) exception;
             status = webEx.getResponse().getStatus();
             message = webEx.getMessage();
+            exception.printStackTrace();
         } else {
+            exception.printStackTrace();
             logger.error("Unexpected server error: {}", exception.getMessage(), exception);
             message = "An internal server error occurred.";
         }
