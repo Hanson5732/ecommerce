@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @ApplicationScoped // 声明为 CDI Bean
 public class AddressServiceImpl implements AddressService {
 
-    @Inject // 注入 Address DAO
+    @Inject
     private AddressDao addressDao;
 
     @Inject // 注入 User DAO (添加地址时需要)

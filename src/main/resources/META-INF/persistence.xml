@@ -1,16 +1,10 @@
 <persistence-unit name="default" transaction-type="JTA">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <jta-data-source>java:comp/DefaultDataSource</jta-data-source>
+    <jta-data-source>ecommerce</jta-data-source>
 
     <properties>
-        <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
-        <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/ecommerce?useSSL=false&amp;serverTimezone=UTC" />
-        <property name="jakarta.persistence.jdbc.user" value="root" />
-        <property name="jakarta.persistence.jdbc.password" value="Hanson242624" />
-
-
-        <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+        <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
         <property name="hibernate.show_sql" value="true"/>
         <property name="hibernate.format_sql" value="true" />
     </properties>

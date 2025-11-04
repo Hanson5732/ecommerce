@@ -9,7 +9,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,14 +156,14 @@ public class ProductServiceImpl implements ProductService {
         product.setRatingNum(0); // 默认值
 
         // 4. 【妥协】转换 Details DTO
-        // Django 过滤空值
         if (dto.details() != null) {
-            List<String> detailsAsStrings = dto.details().stream()
+            // 将 List<ProductAdminInputDto.DetailDto> 转换为 List<ProductDetailItem>
+            List<ProductDetailItem> detailItems = dto.details().stream()
                     .filter(d -> d.key() != null && !d.key().isEmpty() && d.value() != null && !d.value().isEmpty())
-                    // 转换为 "Key: Value" 字符串，以匹配 List<String> 实体
-                    .map(d -> d.key() + ": " + d.value())
+                    // 直接创建 POJO 对象
+                    .map(d -> new ProductDetailItem(d.key(), d.value()))
                     .collect(Collectors.toList());
-            product.setProductDetails(detailsAsStrings);
+            product.setProductDetails(detailItems); // 直接设置对象列表
         } else {
             product.setProductDetails(new ArrayList<>());
         }
@@ -205,11 +204,15 @@ public class ProductServiceImpl implements ProductService {
 
         // 更新 Details
         if (dto.details() != null) {
-            List<String> detailsAsStrings = dto.details().stream()
+            // 1. 不再创建 List<String>，而是创建 List<ProductDetailItem>
+            List<ProductDetailItem> detailItems = dto.details().stream()
                     .filter(d -> d.key() != null && !d.key().isEmpty() && d.value() != null && !d.value().isEmpty())
-                    .map(d -> d.key() + ": " + d.value())
+                    // 2. 不再压平字符串，而是创建新 POJO
+                    .map(d -> new ProductDetailItem(d.key(), d.value()))
                     .collect(Collectors.toList());
-            product.setProductDetails(detailsAsStrings);
+
+            // 3. 将 List<ProductDetailItem> 设置给实体
+            product.setProductDetails(detailItems);
         }
 
         // 5. 更新 (PreUpdate 会设置 updated_time)

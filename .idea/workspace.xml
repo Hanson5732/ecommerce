@@ -10,11 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0afd84e9-493a-4af3-8e0c-2907d14352e8" name="Changes" comment="Rebuild Except JWT Auth function.">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/65d1425b-a5c6-4dac-ae60-26c24c9b02b7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/65d1425b-a5c6-4dac-ae60-26c24c9b02b7.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/converter/ProductDetailConverter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/ProductDetailItem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/exception/GlobalExceptionMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/exception/GlobalExceptionMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/ProductDetailDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/ProductDetailDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/entity/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/entity/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/AddressServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/AddressServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/ProductServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/microprofile-config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/microprofile-config.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
     </list>

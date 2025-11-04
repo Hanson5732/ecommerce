@@ -7,6 +7,8 @@ import java.util.UUID;
 import com.rabbuy.ecommerce.converter.StringListToJsonConverter;
 import java.util.ArrayList;
 import java.util.List;
+import com.rabbuy.ecommerce.converter.ProductDetailConverter;
+import com.rabbuy.ecommerce.dto.ProductDetailItem;
 
 @Entity
 @Table(name = "product_product")
@@ -40,8 +42,8 @@ public class Product {
 
     @Lob
     @Column(name = "product_details", nullable = false, columnDefinition = "TEXT DEFAULT '[]'")
-    @Convert(converter = StringListToJsonConverter.class)
-    private List<String> productDetails = new ArrayList<>();
+    @Convert(converter = ProductDetailConverter.class)
+    private List<ProductDetailItem> productDetails = new ArrayList<>();
 
     @Column(name = "product_rating", nullable = false, columnDefinition = "DOUBLE PRECISION DEFAULT 0.0")
     private Double productRating = 0.0;
@@ -89,9 +91,10 @@ public class Product {
     public void setStockQuantity(Integer stockQuantity) { this.stockQuantity = stockQuantity; }
     public Integer getLowStockThreshold() { return lowStockThreshold; }
     public void setLowStockThreshold(Integer lowStockThreshold) { this.lowStockThreshold = lowStockThreshold; }
-    public List<String> getProductDetails() { return productDetails; }
-    public void setProductDetails(List<String> productDetails) { this.productDetails = productDetails == null ? new ArrayList<>() : productDetails; }
-    public Double getProductRating() { return productRating; }
+    public List<ProductDetailItem> getProductDetails() { return productDetails; }
+    public void setProductDetails(List<ProductDetailItem> productDetails) {
+        this.productDetails = (productDetails == null) ? new ArrayList<>() : productDetails;
+    }    public Double getProductRating() { return productRating; }
     public void setProductRating(Double productRating) { this.productRating = productRating; }
     public Integer getRatingNum() { return ratingNum; }
     public void setRatingNum(Integer ratingNum) { this.ratingNum = ratingNum; }

@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
+import com.rabbuy.ecommerce.dto.ProductDetailItem;
 
 
 public record ProductDetailDto(
@@ -19,7 +20,7 @@ public record ProductDetailDto(
         Integer stockQuantity,
         Integer lowStockThreshold,
         List<String> images,
-        List<String> details, // product_details
+        List<ProductDetailItem> details, // product_details
         CategoryBriefDto category, // 嵌套的分类信息
         SubCategoryBriefDto subCategory, // 嵌套的子分类信息
         OffsetDateTime createdTime,
