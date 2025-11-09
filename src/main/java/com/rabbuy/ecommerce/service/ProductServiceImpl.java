@@ -1,8 +1,10 @@
 package com.rabbuy.ecommerce.service;
 
+import com.rabbuy.ecommerce.dao.CategoryDao;
 import com.rabbuy.ecommerce.dao.ProductDao;
 import com.rabbuy.ecommerce.dao.SubCategoryDao;
 import com.rabbuy.ecommerce.dto.*;
+import com.rabbuy.ecommerce.entity.Category;
 import com.rabbuy.ecommerce.entity.Product;
 import com.rabbuy.ecommerce.entity.SubCategory;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -11,6 +13,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,6 +26,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Inject
     private SubCategoryDao subCategoryDao;
+
+    @Inject
+    private CategoryDao categoryDao;
 
     @Override
     public ProductDetailDto getProductDetails(UUID productId) throws NotFoundException {
@@ -231,5 +237,119 @@ public class ProductServiceImpl implements ProductService {
 
         // 逻辑删除
         productDao.logicalDelete(product); //
+    }
+
+    @Override
+    public List<HomeProductResponseDto> getHomeProducts() {
+
+        // 1. 获取所有启用的子分类 (DAO 已包含父分类)
+        List<SubCategory> activeSubCategories = subCategoryDao.findAllActive();
+        if (activeSubCategories.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // 2. 在内存中洗牌 (实现 Python 的 order_by('?'))
+        Collections.shuffle(activeSubCategories);
+
+        // 3. 取前 2 个 (实现 Python 的 [:2])
+        List<SubCategory> randomSubCategories = activeSubCategories.stream().limit(2).collect(Collectors.toList());
+
+        List<HomeProductResponseDto> responseData = new ArrayList<>();
+
+        // 4. 遍历这 2 个随机子分类
+        for (SubCategory subCategory : randomSubCategories) {
+
+            // 5. 获取该分类下的所有启用商品
+            List<Product> allProducts = productDao.findActiveBySubCategoryForRandom(subCategory.getSubCateId());
+
+            // 6. 再次洗牌 (实现 Python 的 order_by('?'))
+            Collections.shuffle(allProducts);
+
+            // 7. 取前 8 个 (实现 Python 的 [:8]) 并转换为 DTO
+            List<HomeProductGoodsDto> goodsList = allProducts.stream()
+                    .limit(8)
+                    .map(product -> new HomeProductGoodsDto(
+                            product.getProductId(),
+                            product.getProductName(),
+                            product.getPrice(),
+                            (product.getImages() != null && !product.getImages().isEmpty()) ? product.getImages().get(0) : null
+                    ))
+                    .collect(Collectors.toList());
+
+            // 8. 准备 Python 中的 "picture" 字段 (带回退URL)
+            String imageUrl = (subCategory.getSubCateImage() != null && !subCategory.getSubCateImage().isEmpty())
+                    ? subCategory.getSubCateImage()
+                    : "https://picsum.photos/200/600"; // Fallback URL from Python code
+
+            // 9. 构建最终的 DTO 结构
+            responseData.add(new HomeProductResponseDto(
+                    subCategory.getCategory().getCategoryId(),   // "id": random_subcategory.category.category_id
+                    subCategory.getCategory().getCategoryName(), // "name": random_subcategory.category.category_name
+                    subCategory.getSubCateName(),                // "saleInfo": random_subcategory.sub_cate_name
+                    imageUrl,                                    // "picture": ...
+                    goodsList                                    // "goods": [...]
+            ));
+        }
+
+        return responseData;
+    }
+
+    @Override
+    public List<RecommendCategoryResponseDto> getRecommendCategories() {
+        // 1. 获取前7个启用状态的主分类 (Python: [7:])
+        List<Category> categories = categoryDao.findActiveCategories(7);
+
+        List<RecommendCategoryResponseDto> categoryList = new ArrayList<>();
+
+        // 2. 遍历主分类
+        for (Category category : categories) {
+
+            // 3. 获取该主分类下的所有启用子分类
+            List<SubCategory> allSubCats = subCategoryDao.findActiveByCategoryId(category.getCategoryId());
+
+            // 4. 随机洗牌 (Python: order_by('?'))
+            Collections.shuffle(allSubCats);
+
+            // 5. 取前 2 个 (Python: [:2])
+            List<SubCategory> randomSubCats = allSubCats.stream().limit(2).collect(Collectors.toList());
+
+            List<RecommendSubCategoryDto> subListDto = new ArrayList<>();
+            List<RecommendProductDto> allProductsDto = new ArrayList<>();
+
+            // 6. 遍历 2 个随机子分类
+            for (SubCategory sub : randomSubCats) {
+                // 7. 构造子分类 DTO
+                subListDto.add(new RecommendSubCategoryDto(sub.getSubCateId(), sub.getSubCateName()));
+
+                // 8. 获取该子分类下的所有启用商品
+                // (我们重用上一步为你创建的 findActiveBySubCategoryForRandom 方法)
+                List<Product> products = productDao.findActiveBySubCategoryForRandom(sub.getSubCateId());
+
+                // 9. 随机洗牌
+                Collections.shuffle(products);
+
+                // 10. 取前 4 个 (Python: [:4]) 并添加到总商品列表
+                products.stream()
+                        .limit(4)
+                        .forEach(product -> {
+                            allProductsDto.add(new RecommendProductDto(
+                                    product.getProductId(),
+                                    product.getProductName(),
+                                    product.getPrice(),
+                                    (product.getImages() != null && !product.getImages().isEmpty()) ? product.getImages().get(0) : null
+                            ));
+                        });
+            }
+
+            // 11. 构造主分类 DTO
+            categoryList.add(new RecommendCategoryResponseDto(
+                    category.getCategoryId(),
+                    category.getCategoryName(),
+                    subListDto,   // 'children': sub_list
+                    allProductsDto // 'products': all_products
+            ));
+        }
+
+        return categoryList;
     }
 }

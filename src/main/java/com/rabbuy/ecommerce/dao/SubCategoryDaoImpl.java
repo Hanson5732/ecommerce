@@ -80,4 +80,19 @@ public class SubCategoryDaoImpl implements SubCategoryDao {
             em.remove(managed);
         }
     }
+
+    @Override
+    public List<SubCategory> findAllActive() {
+        // 使用 JOIN FETCH 确保父分类被立即加载，避免 N+1 查询
+        String jpql = "SELECT s FROM SubCategory s JOIN FETCH s.category WHERE s.status = '1'";
+        return em.createQuery(jpql, SubCategory.class).getResultList();
+    }
+
+    @Override
+    public List<SubCategory> findActiveByCategoryId(UUID categoryId) {
+        String jpql = "SELECT s FROM SubCategory s WHERE s.category.categoryId = :categoryId AND s.status = '1'";
+        return em.createQuery(jpql, SubCategory.class)
+                .setParameter("categoryId", categoryId)
+                .getResultList();
+    }
 }

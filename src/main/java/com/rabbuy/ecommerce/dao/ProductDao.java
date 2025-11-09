@@ -42,4 +42,9 @@ public interface ProductDao {
 
     // --- 库存查询 ---
     ProductStockStatus getStockStatus();
+
+    /**
+     * 查找子分类下所有启用的商品（用于随机抽取）
+     */
+    List<Product> findActiveBySubCategoryForRandom(UUID subCategoryId);
 }

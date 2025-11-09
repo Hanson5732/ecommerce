@@ -28,8 +28,6 @@ public class UserServiceImpl implements UserService {
     private PasswordHash passwordHash;
     @Inject
     private TokenService tokenService;
-    @Inject
-    private RecaptchaService recaptchaService;
 
     // (toResponseDto 和 checkPasswordStrength 辅助方法保持不变)
     private UserResponseDto toResponseDto(User user) {
@@ -54,8 +52,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public AuthResponseDto registerUser(UserSignupDto userDto) throws IllegalArgumentException, JoseException {
-        // 验证 reCAPTCHA
-        recaptchaService.verify(userDto.recaptchaToken(), "register");
 
         // 1. 验证 (省略，与上一步相同)
         if (userDto.username() == null || userDto.email() == null || userDto.password() == null || userDto.confirmPwd() == null) {
@@ -107,8 +103,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public AuthResponseDto loginUser(UserLoginDto loginDto) throws SecurityException, JoseException {
-        // 验证 reCAPTCHA
-        recaptchaService.verify(loginDto.recaptchaToken(), "login");
 
         User user = userDao.findByUsername(loginDto.username())
                 .orElseThrow(() -> new SecurityException("Incorrect username or password"));

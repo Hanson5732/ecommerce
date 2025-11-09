@@ -2,6 +2,7 @@ package com.rabbuy.ecommerce.resource;
 
 import com.rabbuy.ecommerce.dto.ApiResponseDto;
 import com.rabbuy.ecommerce.dto.HomeMessageCountDto;
+import com.rabbuy.ecommerce.dto.HomeProductResponseDto;
 import com.rabbuy.ecommerce.dto.ProductListDto;
 import com.rabbuy.ecommerce.service.OrderService;
 import com.rabbuy.ecommerce.service.ProductService;
@@ -15,6 +16,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import com.rabbuy.ecommerce.dto.RecommendCategoryResponseDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -56,6 +58,28 @@ public class HomeResource {
         // Django view hardcodes limit to 4
         List<ProductListDto> products = productService.getHotProducts(4);
         return Response.ok(ApiResponseDto.success(products)).build();
+    }
+
+    /**
+     * 获取首页商品（随机分类）
+     * @return
+     */
+    @GET
+    @Path("/products")
+    public Response getHomeProducts() {
+        List<HomeProductResponseDto> products = productService.getHomeProducts();
+        return Response.ok(ApiResponseDto.success(products)).build();
+    }
+
+    /**
+     * 获取首页按分类推荐
+     * @return
+     */
+    @GET
+    @Path("/recommend")
+    public Response getRecommendCategories() {
+        List<RecommendCategoryResponseDto> data = productService.getRecommendCategories();
+        return Response.ok(ApiResponseDto.success(data)).build();
     }
 
     /**

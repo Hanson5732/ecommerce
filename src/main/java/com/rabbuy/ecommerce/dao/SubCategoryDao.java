@@ -45,4 +45,17 @@ public interface SubCategoryDao {
      * 删除
      */
     void delete(SubCategory subCategory);
+
+    /**
+     * 查找所有状态为 '1' (启用) 的子分类
+     * @return
+     */
+    List<SubCategory> findAllActive();
+
+    /**
+     * 查找某个主分类下的所有启用状态的子分类
+     * @param categoryId
+     * @return
+     */
+    List<SubCategory> findActiveByCategoryId(UUID categoryId);
 }

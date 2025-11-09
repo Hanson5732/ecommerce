@@ -291,4 +291,15 @@ public class ProductDaoImpl implements ProductDao {
                 return "";
         }
     }
+
+    // ... (保留所有旧方法) ...
+
+    @Override
+    public List<Product> findActiveBySubCategoryForRandom(UUID subCategoryId) {
+        // 仅查询，不排序不分页，后续在 Service 层 shuffle
+        String jpql = "SELECT p FROM Product p WHERE p.subCategory.subCateId = :subCategoryId AND p.status = '1' AND p.isDeleted = false";
+        return em.createQuery(jpql, Product.class)
+                .setParameter("subCategoryId", subCategoryId)
+                .getResultList();
+    }
 }

@@ -8,7 +8,6 @@ public record UserSignupDto(
         String lastName,
         String password,
         String confirmPwd,
-        Boolean isStaff,
-        String recaptchaToken
+        Boolean isStaff
 ) {
 }

@@ -20,4 +20,6 @@ public interface ProductService {
     ProductDetailDto addProduct(ProductAdminInputDto dto) throws NotFoundException, IllegalArgumentException;
     ProductDetailDto updateProduct(UUID productId, ProductAdminInputDto dto) throws NotFoundException, IllegalArgumentException;
     void deleteProduct(UUID productId) throws NotFoundException;
+    List<HomeProductResponseDto> getHomeProducts();
+    List<RecommendCategoryResponseDto> getRecommendCategories();
 }
