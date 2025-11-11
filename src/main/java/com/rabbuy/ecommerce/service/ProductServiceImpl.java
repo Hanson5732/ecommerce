@@ -15,7 +15,6 @@ import jakarta.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -31,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
     private CategoryDao categoryDao;
 
     @Override
-    public ProductDetailDto getProductDetails(UUID productId) throws NotFoundException {
+    public ProductDetailDto getProductDetails(String productId) throws NotFoundException {
         // DAO 方法已包含 status='1' 和 is_deleted=False 检查
         Product product = productDao.findActiveById(productId)
                 .orElseThrow(() -> new NotFoundException("Product does not exist")); //
@@ -79,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductListDto> getProductRecommendations(UUID productId, String name, int limit) {
+    public List<ProductListDto> getProductRecommendations(String productId, String name, int limit) {
         if (name == null || name.isEmpty()) {
             return List.of(); //
         }
@@ -94,7 +93,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductStatusDto getProductStatus(UUID productId) throws NotFoundException {
+    public ProductStatusDto getProductStatus(String productId) throws NotFoundException {
         // 此接口需要检查任何商品，无论其状态如何，因此我们使用 findById
         Product product = productDao.findById(productId)
                 .orElseThrow(() -> new NotFoundException("Product not found"));
@@ -126,7 +125,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDetailDto getAdminProductDetails(UUID productId) throws NotFoundException {
+    public ProductDetailDto getAdminProductDetails(String productId) throws NotFoundException {
         //
         // 使用 findById (不过滤 status/is_deleted)
         Product product = productDao.findById(productId)
@@ -182,7 +181,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductDetailDto updateProduct(UUID productId, ProductAdminInputDto dto) throws NotFoundException, IllegalArgumentException {
+    public ProductDetailDto updateProduct(String productId, ProductAdminInputDto dto) throws NotFoundException, IllegalArgumentException {
         //
         Product product = productDao.findById(productId)
                 .orElseThrow(() -> new NotFoundException("Product not found"));
@@ -230,7 +229,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void deleteProduct(UUID productId) throws NotFoundException {
+    public void deleteProduct(String productId) throws NotFoundException {
         //
         Product product = productDao.findById(productId)
                 .orElseThrow(() -> new NotFoundException("Product does not exist"));

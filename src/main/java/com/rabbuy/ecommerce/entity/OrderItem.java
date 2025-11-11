@@ -4,6 +4,8 @@ import com.rabbuy.ecommerce.converter.ProductSnapshotConverter;
 import com.rabbuy.ecommerce.dto.ProductSnapshot;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "order_orderitem")
@@ -16,9 +18,8 @@ public class OrderItem {
     @Column(name = "item_status", nullable = false, length = 2, columnDefinition = "VARCHAR(2) DEFAULT '0'")
     private String itemStatus = "0";
 
-    @Lob
-    @Column(name = "product", nullable = false, columnDefinition = "TEXT")
-    @Convert(converter = ProductSnapshotConverter.class) // 应用转换器
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "product", nullable = false, columnDefinition = "json")
     private ProductSnapshot product;
 
     @Column(name = "is_read", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")

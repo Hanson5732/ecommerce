@@ -5,7 +5,7 @@ import com.rabbuy.ecommerce.dao.UserDao;
 import com.rabbuy.ecommerce.dto.*; // 导入所有 DTO
 import com.rabbuy.ecommerce.entity.Cart;
 import com.rabbuy.ecommerce.entity.User;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ejb.Singleton;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.identitystore.PasswordHash;
 import jakarta.transaction.Transactional;
@@ -14,10 +14,9 @@ import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.lang.JoseException; // 导入
 
 import java.time.OffsetDateTime; // 导入
-import java.util.UUID; // 导入
 import java.util.regex.Pattern;
 
-@ApplicationScoped
+@Singleton
 public class UserServiceImpl implements UserService {
 
     @Inject
@@ -133,7 +132,7 @@ public class UserServiceImpl implements UserService {
         //
 
         // 1. 验证 token 并获取 user ID
-        UUID userId = tokenService.validateRefreshToken(refreshToken);
+        String userId = tokenService.validateRefreshToken(refreshToken);
 
         // 2. 查找用户
         User user = userDao.findById(userId)
@@ -154,7 +153,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public AuthResponseDto updateUserProfile(UUID userId, UserProfileUpdateDto updateDto) throws JoseException, NotFoundException, IllegalArgumentException {
+    public AuthResponseDto updateUserProfile(String userId, UserProfileUpdateDto updateDto) throws JoseException, NotFoundException, IllegalArgumentException {
         //
         User user = userDao.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));

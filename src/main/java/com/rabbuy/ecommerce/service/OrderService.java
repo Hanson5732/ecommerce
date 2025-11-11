@@ -18,7 +18,7 @@ public interface OrderService {
     /**
      * 获取订单详情（客户）
      */
-    OrderDetailResponseDto getOrderDetails(UUID orderId) throws NotFoundException;
+    OrderDetailResponseDto getOrderDetails(String orderId) throws NotFoundException;
 
     /**
      * 更新订单（客户/管理员）
@@ -33,7 +33,7 @@ public interface OrderService {
     /**
      * 获取客户订单列表（分页）
      */
-    PaginatedResult<OrderListDto> getOrdersByUserId(UUID userId, String itemStatus, int page, int pageSize);
+    PaginatedResult<OrderListDto> getOrdersByUserId(String userId, String itemStatus, int page, int pageSize);
 
     /**
      * 获取订单项详情（用于评论检查）
@@ -43,19 +43,19 @@ public interface OrderService {
     /**
      * 获取未读通知数量
      */
-    OrderNotificationCountDto getNotificationCount(UUID userId);
+    OrderNotificationCountDto getNotificationCount(String userId);
 
     /**
      * 标记通知为已读
      */
-    void markNotificationsAsRead(UUID userId);
+    void markNotificationsAsRead(String userId);
 
     /**
      * 获取首页的消息计数
      * @param userId
      * @return
      */
-    HomeMessageCountDto getMessageCountsByUserId(UUID userId);
+    HomeMessageCountDto getMessageCountsByUserId(String userId);
 
     /**
      * 管理员：获取所有订单列表（分页）
@@ -72,7 +72,7 @@ public interface OrderService {
      * @return
      * @throws NotFoundException
      */
-    OrderDetailResponseDto getAdminOrderDetail(UUID orderId) throws NotFoundException;
+    OrderDetailResponseDto getAdminOrderDetail(String orderId) throws NotFoundException;
 
     /**
      * 管理员：更新订单项状态（例如：发货、退款完成）

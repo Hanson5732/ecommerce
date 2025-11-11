@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @ApplicationScoped
 public class UserDaoImpl implements UserDao {
@@ -28,7 +27,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findById(UUID id) {
+    public Optional<User> findById(String id) {
         return Optional.ofNullable(em.find(User.class, id));
     }
 
@@ -86,7 +85,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     @Transactional
-    public void deleteById(UUID id) {
+    public void deleteById(String id) {
         findById(id).ifPresent(this::delete);
     }
 

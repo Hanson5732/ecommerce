@@ -3,9 +3,11 @@ package com.rabbuy.ecommerce.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 
 @Entity
@@ -13,9 +15,10 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
+    @GeneratedValue(generator = "uuid-hex")
+    @GenericGenerator(name = "uuid-hex", strategy = "org.hibernate.id.UUIDHexGenerator")
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "CHAR(32)")
+    private String id;
 
     @Column(name = "username", nullable = false, unique = true, length = 150)
     private String username;
@@ -34,6 +37,9 @@ public class User {
 
     @Column(name = "is_staff", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isStaff = false;
+
+    @Column(name = "is_superuser", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean isSuperuser = false;
 
     @Column(name = "is_active", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
     private boolean isActive = true;
@@ -74,8 +80,8 @@ public class User {
     }
 
     // --- Getters and Setters ---
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
     public String getPassword() { return password; }
@@ -88,6 +94,8 @@ public class User {
     public void setLastName(String lastName) { this.lastName = lastName; }
     public boolean isStaff() { return isStaff; }
     public void setStaff(boolean staff) { isStaff = staff; }
+    public boolean isSuperuser() { return isSuperuser; }
+    public void setSuperuser(boolean superuser) { isSuperuser = superuser; }
     public boolean isActive() { return isActive; }
     public void setActive(boolean active) { isActive = active; }
     public OffsetDateTime getDateJoined() { return dateJoined; }

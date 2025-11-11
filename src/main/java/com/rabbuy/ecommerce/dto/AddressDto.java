@@ -1,9 +1,8 @@
 package com.rabbuy.ecommerce.dto;
 
-import java.util.UUID;
 
 public record AddressDto(
-        UUID id,
+        String id,
         String tag,
         String recipient,
         String phone,

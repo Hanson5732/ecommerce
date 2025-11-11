@@ -8,7 +8,7 @@ import java.util.UUID;
  */
 public record SubCategoryInputDto(
         String name,
-        UUID categoryId,
+        String categoryId,
         String images, // Django 中 'images' 是 URL 字符串
         String status
 ) {

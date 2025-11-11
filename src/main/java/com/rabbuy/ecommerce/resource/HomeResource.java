@@ -90,7 +90,7 @@ public class HomeResource {
     @Path("/message")
     @RolesAllowed({"admin", "customer"}) // (token_required)
     public Response getMessageCounts() {
-        UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
+        String currentUserId = jwtPrincipal.getName();
         HomeMessageCountDto counts = orderService.getMessageCountsByUserId(currentUserId);
         return Response.ok(ApiResponseDto.success(counts)).build();
     }

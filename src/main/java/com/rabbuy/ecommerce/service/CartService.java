@@ -14,13 +14,13 @@ public interface CartService {
      * 获取用户购物车详情（包含实时商品信息）
      *
      */
-    CartResponseDto getCartByUserId(UUID userId) throws NotFoundException;
+    CartResponseDto getCartByUserId(String userId) throws NotFoundException;
 
     /**
      * 完全覆盖用户的购物车
      *
      */
-    void saveCart(UUID userId, List<CartItem> itemsDto) throws NotFoundException;
+    void saveCart(String userId, List<CartItem> itemsDto) throws NotFoundException;
 
     /**
      * 创建空购物车 (用于 UserService)

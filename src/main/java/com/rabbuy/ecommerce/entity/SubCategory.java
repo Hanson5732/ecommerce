@@ -1,16 +1,19 @@
 package com.rabbuy.ecommerce.entity;
 
 import jakarta.persistence.*;
-import java.util.UUID;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "category_subcategory")
 public class SubCategory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // 或 GenerationType.UUID
-    @Column(name = "sub_cate_id", updatable = false, nullable = false)
-    private UUID subCateId;
+    @GeneratedValue(generator = "uuid-hex")
+    @GenericGenerator(name = "uuid-hex", strategy = "org.hibernate.id.UUIDHexGenerator")
+    @Column(name = "sub_cate_id", updatable = false, nullable = false, columnDefinition = "CHAR(32)")
+    private String subCateId;
 
     @Column(name = "sub_cate_name", nullable = false, length = 100)
     private String subCateName;
@@ -31,11 +34,11 @@ public class SubCategory {
     }
 
     // Getters and Setters
-    public UUID getSubCateId() {
+    public String getSubCateId() {
         return subCateId;
     }
 
-    public void setSubCateId(UUID subCateId) {
+    public void setSubCateId(String subCateId) {
         this.subCateId = subCateId;
     }
 

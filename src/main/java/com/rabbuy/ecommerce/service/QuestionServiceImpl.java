@@ -81,7 +81,7 @@ public class QuestionServiceImpl implements QuestionService {
     // --- 服务实现 ---
 
     @Override
-    public List<QuestionResponseDto> getQuestionsByProductId(UUID productId) {
+    public List<QuestionResponseDto> getQuestionsByProductId(String productId) {
         //
         // DAO 层负责预加载 (JOIN FETCH) 所有关联数据
         List<Question> questions = questionDao.findByProductId(productId);
@@ -94,7 +94,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    public QuestionResponseDto addQuestion(UUID productId, UUID userId, QuestionAddDto dto) throws NotFoundException {
+    public QuestionResponseDto addQuestion(String productId, String userId, QuestionAddDto dto) throws NotFoundException {
         //
         // 1. 验证输入
         if (dto.content() == null || dto.content().trim().isEmpty()) {
@@ -124,7 +124,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    public AnswerResponseDto addAnswer(UUID questionId, UUID userId, AnswerAddDto dto) throws NotFoundException {
+    public AnswerResponseDto addAnswer(String questionId, String userId, AnswerAddDto dto) throws NotFoundException {
         //
         // 1. 验证输入
         if (dto.content() == null || dto.content().trim().isEmpty()) {

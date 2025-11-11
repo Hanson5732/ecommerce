@@ -27,7 +27,7 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public Optional<Category> findById(UUID id) {
+    public Optional<Category> findById(String id) {
         Category category = em.find(Category.class, id);
         return Optional.ofNullable(category); // 返回 Optional 以优雅处理 null
     }
@@ -55,12 +55,8 @@ public class CategoryDaoImpl implements CategoryDao {
         if (em.find(Category.class, category.getCategoryId()) != null) {
             em.merge(category);
         } else {
-            // 可以选择抛出异常，因为通常期望更新已存在的实体
             throw new IllegalArgumentException("Category with id " + category.getCategoryId() + " not found for update.");
         }
-        // 注意：如果 category 是从数据库加载后修改的受管实体，
-        // 在事务提交时，JPA 会自动将更改同步到数据库，不一定需要显式调用 merge。
-        // 但显式调用 merge 对于分离的（detached）实体是必要的。
     }
 
     @Override
@@ -78,11 +74,8 @@ public class CategoryDaoImpl implements CategoryDao {
 
     @Override
     @Transactional
-    public void deleteById(UUID id) {
-        findById(id).ifPresent(this::delete); // 查找实体，如果存在则调用 delete 方法
-        // 或者直接执行删除查询
-        // em.createQuery("DELETE FROM Category c WHERE c.categoryId = :id")
-        //   .setParameter("id", id)
-        //   .executeUpdate();
+    public void deleteById(String id) {
+        // 查找实体，如果存在则调用 delete 方法
+        findById(id).ifPresent(this::delete);
     }
 }

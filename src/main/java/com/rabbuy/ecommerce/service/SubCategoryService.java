@@ -15,13 +15,13 @@ public interface SubCategoryService {
     /**
      * 获取二级分类详情
      */
-    SubCategoryDto getSubCategoryDetails(UUID id) throws NotFoundException;
+    SubCategoryDto getSubCategoryDetails(String id) throws NotFoundException;
 
     /**
      * 获取二级分类下的商品（分页）
      */
     PaginatedResult<SubCategoryProductDto> getSubCategoryProducts(
-            UUID subCategoryId, BigDecimal minPrice, BigDecimal maxPrice,
+            String subCategoryId, BigDecimal minPrice, BigDecimal maxPrice,
             String sortField, int page, int pageSize) throws NotFoundException;
 
     /**
@@ -42,10 +42,10 @@ public interface SubCategoryService {
     /**
      * 更新二级分类
      */
-    SubCategoryDto updateSubCategory(UUID id, SubCategoryInputDto dto) throws NotFoundException, IllegalArgumentException;
+    SubCategoryDto updateSubCategory(String id, SubCategoryInputDto dto) throws NotFoundException, IllegalArgumentException;
 
     /**
      * 删除二级分类
      */
-    void deleteSubCategory(UUID id) throws NotFoundException, IllegalStateException;
+    void deleteSubCategory(String id) throws NotFoundException, IllegalStateException;
 }

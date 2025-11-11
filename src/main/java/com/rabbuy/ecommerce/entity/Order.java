@@ -1,18 +1,21 @@
 package com.rabbuy.ecommerce.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "order_order")
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // 或 GenerationType.UUID
-    @Column(name = "order_id", updatable = false, nullable = false)
-    private UUID orderId;
+    @GeneratedValue(generator = "uuid-hex")
+    @GenericGenerator(name = "uuid-hex", strategy = "org.hibernate.id.UUIDHexGenerator")
+    @Column(name = "order_id", updatable = false, nullable = false, columnDefinition = "CHAR(32)")
+    private String orderId;
 
     // 订单状态: '0': Unpaid, '1': Paid, '2': Canceled
     @Column(name = "order_status", nullable = false, length = 1, columnDefinition = "VARCHAR(1) DEFAULT '0'")
@@ -56,8 +59,8 @@ public class Order {
     }
 
     // --- Getters and Setters ---
-    public UUID getOrderId() { return orderId; }
-    public void setOrderId(UUID orderId) { this.orderId = orderId; }
+    public String getOrderId() { return orderId; }
+    public void setOrderId(String orderId) { this.orderId = orderId; }
     public String getOrderStatus() { return orderStatus; }
     public void setOrderStatus(String orderStatus) { this.orderStatus = orderStatus; }
     public String getDeliveryTime() { return deliveryTime; }

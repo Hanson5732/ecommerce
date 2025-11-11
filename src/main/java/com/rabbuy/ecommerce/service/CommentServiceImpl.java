@@ -15,7 +15,6 @@ import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -53,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public PaginatedResult<CommentResponseDto> getProductComments(UUID productId, String ratingFilter, boolean hasImageOnly, int page, int pageSize) {
+    public PaginatedResult<CommentResponseDto> getProductComments(String productId, String ratingFilter, boolean hasImageOnly, int page, int pageSize) {
         //
         // 1. DAO 层负责数据库查询和分页
         // ** 假设 CommentDaoImpl.findByProductId 实现了 user 信息的预加载 **

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "comment")
@@ -27,9 +29,8 @@ public class Comment {
     @Column(name = "updated_time", nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
     private OffsetDateTime updatedTime;
 
-    @Lob
-    @Column(name = "images", columnDefinition = "TEXT")
-    @Convert(converter = StringListToJsonConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "images", columnDefinition = "json")
     private List<String> images = new ArrayList<>();
 
     // 多对一关系：多个评论可以属于一个产品

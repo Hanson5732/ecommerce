@@ -32,7 +32,7 @@ public class QuestionResource {
      */
     @GET
     @Path("/product/{productId}/list")
-    public Response getProductQuestions(@PathParam("productId") UUID productId) {
+    public Response getProductQuestions(@PathParam("productId") String productId) {
         List<QuestionResponseDto> questions = questionService.getQuestionsByProductId(productId);
         return Response.ok(ApiResponseDto.success(questions)).build();
     }
@@ -46,8 +46,8 @@ public class QuestionResource {
     @POST
     @Path("/product/{productId}/add")
     @RolesAllowed({"admin", "customer"}) // (@token_required)
-    public Response addQuestion(@PathParam("productId") UUID productId, QuestionAddDto questionDto) {
-        UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
+    public Response addQuestion(@PathParam("productId") String productId, QuestionAddDto questionDto) {
+        String currentUserId = jwtPrincipal.getName();
 
         // 异常 (NotFound, IllegalArgument) 将被 GlobalExceptionMapper 捕获
         QuestionResponseDto newQuestion = questionService.addQuestion(productId, currentUserId, questionDto);
@@ -63,8 +63,8 @@ public class QuestionResource {
     @POST
     @Path("/answer/{questionId}/add")
     @RolesAllowed({"admin", "customer"}) // (@token_required)
-    public Response addAnswer(@PathParam("questionId") UUID questionId, AnswerAddDto answerDto) {
-        UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
+    public Response addAnswer(@PathParam("questionId") String questionId, AnswerAddDto answerDto) {
+        String currentUserId = jwtPrincipal.getName();
 
         // 异常 (NotFound, IllegalArgument) 将被 GlobalExceptionMapper 捕获
         AnswerResponseDto newAnswer = questionService.addAnswer(questionId, currentUserId, answerDto);

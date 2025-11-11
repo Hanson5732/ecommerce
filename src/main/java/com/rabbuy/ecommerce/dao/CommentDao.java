@@ -42,5 +42,5 @@ public interface CommentDao {
      * @param pageSize 每页大小
      * @return 分页结果
      */
-    PaginatedResult<Comment> findByProductId(UUID productId, String ratingFilter, boolean hasImageOnly, int page, int pageSize);
+    PaginatedResult<Comment> findByProductId(String productId, String ratingFilter, boolean hasImageOnly, int page, int pageSize);
 }

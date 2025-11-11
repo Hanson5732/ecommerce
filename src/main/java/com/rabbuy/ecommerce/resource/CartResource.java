@@ -36,7 +36,7 @@ public class CartResource {
     @GET
     public Response getCart() {
         // 从 JWT 获取用户 ID，而不是像 Django 那样从查询参数获取
-        UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
+        String currentUserId = jwtPrincipal.getName();
 
         // NotFoundException 会被 GlobalExceptionMapper 自动捕获
         CartResponseDto cart = cartService.getCartByUserId(currentUserId);
@@ -52,7 +52,7 @@ public class CartResource {
     @POST
     @Path("/save")
     public Response saveCart(List<CartItem> cartItems) {
-        UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
+        String currentUserId = jwtPrincipal.getName();
 
         if (cartItems == null) {
             throw new WebApplicationException("Request body (list of products) is required.", Response.Status.BAD_REQUEST);

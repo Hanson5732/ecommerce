@@ -9,8 +9,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.UUID;
-
 @Path("/comment") // 对应 /api/comment
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -32,7 +30,7 @@ public class CommentResource {
     @GET
     @Path("/list")
     public Response getProductComments(
-            @QueryParam("productId") UUID productId,
+            @QueryParam("productId") String productId,
             @QueryParam("currentPage") @DefaultValue("1") int page,
             @QueryParam("pageSize") @DefaultValue("20") int pageSize,
             @QueryParam("rating") String ratingFilter,

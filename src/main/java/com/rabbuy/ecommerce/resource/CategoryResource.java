@@ -12,13 +12,12 @@ import jakarta.ws.rs.core.Response;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 
 @Path("/category")
 @ApplicationScoped
-@Produces(MediaType.APPLICATION_JSON) // 默认返回 JSON
-@Consumes(MediaType.APPLICATION_JSON) // 默认接收 JSON
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class CategoryResource {
 
     @Inject
@@ -76,7 +75,7 @@ public class CategoryResource {
      */
     @PUT
     @Path("/update/{id}") // @PathParam 用于从 URL 路径获取参数
-    public Response updateCategory(@PathParam("id") UUID id, CategoryInputDto categoryDto) {
+    public Response updateCategory(@PathParam("id") String id, CategoryInputDto categoryDto) {
         CategoryAdminDto updatedCategory = categoryService.updateCategory(id, categoryDto);
         return Response.ok(ApiResponseDto.success(updatedCategory)).build();
     }
@@ -88,7 +87,7 @@ public class CategoryResource {
      */
     @DELETE
     @Path("/delete/{id}")
-    public Response deleteCategory(@PathParam("id") UUID id) {
+    public Response deleteCategory(@PathParam("id") String id) {
         categoryService.deleteCategory(id);
         return Response.ok(ApiResponseDto.success("Category deleted successfully")).build();
     }
@@ -100,7 +99,7 @@ public class CategoryResource {
      */
     @GET
     @Path("/sub/filter/{id}")
-    public Response getSubCategoryFilter(@PathParam("id") UUID id) {
+    public Response getSubCategoryFilter(@PathParam("id") String id) {
         SubCategoryDto dto = subCategoryService.getSubCategoryDetails(id);
         return Response.ok(ApiResponseDto.success(dto)).build();
     }
@@ -118,7 +117,7 @@ public class CategoryResource {
     @GET
     @Path("/sub/product")
     public Response getSubCategoryProducts(
-            @QueryParam("subCategoryId") UUID subCategoryId,
+            @QueryParam("subCategoryId") String subCategoryId,
             @QueryParam("page") @DefaultValue("1") int page,
             @QueryParam("pageSize") @DefaultValue("20") int pageSize,
             @QueryParam("sortField") @DefaultValue("default") String sortField,
@@ -186,7 +185,7 @@ public class CategoryResource {
     @PUT
     @Path("/sub/update/{id}")
     @RolesAllowed("admin") //
-    public Response updateSubCategory(@PathParam("id") UUID id, SubCategoryInputDto dto) {
+    public Response updateSubCategory(@PathParam("id") String id, SubCategoryInputDto dto) {
         SubCategoryDto updatedDto = subCategoryService.updateSubCategory(id, dto);
         return Response.ok(ApiResponseDto.success(updatedDto)).build();
     }
@@ -199,7 +198,7 @@ public class CategoryResource {
     @DELETE
     @Path("/sub/delete/{id}")
     @RolesAllowed("admin") //
-    public Response deleteSubCategory(@PathParam("id") UUID id) {
+    public Response deleteSubCategory(@PathParam("id") String id) {
         subCategoryService.deleteSubCategory(id);
         return Response.ok(ApiResponseDto.success("Subcategory deleted successfully")).build();
     }

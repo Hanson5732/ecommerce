@@ -2,7 +2,6 @@ package com.rabbuy.ecommerce.dao;
 
 import com.rabbuy.ecommerce.entity.Cart;
 import java.util.Optional;
-import java.util.UUID;
 
 // Cart 数据访问对象接口
 public interface CartDao {
@@ -11,12 +10,12 @@ public interface CartDao {
      * 根据用户 ID 查找购物车 (核心查询方法)
      *
      */
-    Optional<Cart> findByUserId(UUID userId);
+    Optional<Cart> findByUserId(String userId);
 
     /**
      * 根据购物车 ID 查找
      */
-    Optional<Cart> findById(UUID cartId);
+    Optional<Cart> findById(String cartId);
 
     /**
      * 保存新购物车 (例如，用户注册时)

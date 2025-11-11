@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @ApplicationScoped // CDI Bean
 public class CartServiceImpl implements CartService {
@@ -29,7 +28,7 @@ public class CartServiceImpl implements CartService {
     private ProductDao productDao;
 
     @Override
-    public CartResponseDto getCartByUserId(UUID userId) throws NotFoundException {
+    public CartResponseDto getCartByUserId(String userId) throws NotFoundException {
         // 1. 获取购物车实体
         Cart cart = cartDao.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException("Cart not found for user"));
@@ -39,7 +38,7 @@ public class CartServiceImpl implements CartService {
 
         // 2. 遍历购物车中存储的商品，查询实时数据
         for (CartItem item : storedItems) {
-            UUID productId = item.getId();
+            String productId = item.getId();
             int count = item.getCount();
 
             // 3. 查询实时商品信息 (使用 findActiveById 检查商品是否有效)
@@ -87,7 +86,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional // 写入操作，需要事务
-    public void saveCart(UUID userId, List<CartItem> itemsDto) throws NotFoundException {
+    public void saveCart(String userId, List<CartItem> itemsDto) throws NotFoundException {
         //
         Cart cart = cartDao.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException("Cart not found for user"));

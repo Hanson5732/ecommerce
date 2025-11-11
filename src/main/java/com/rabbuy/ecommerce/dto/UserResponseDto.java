@@ -1,9 +1,7 @@
 package com.rabbuy.ecommerce.dto;
 
-import java.util.UUID;
-
 public record UserResponseDto(
-        UUID id,
+        String id,
         String username,
         String email,
         String firstName,

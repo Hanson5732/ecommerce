@@ -1,10 +1,9 @@
 package com.rabbuy.ecommerce.dto;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public record CartDetailItemDto(
-        UUID id,
+        String id,
         String name,
         int count,
         BigDecimal price, // 实时价格

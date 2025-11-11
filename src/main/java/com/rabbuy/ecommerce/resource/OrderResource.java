@@ -47,7 +47,7 @@ public class OrderResource {
      * @return
      */
     @GET
-    public Response getOrderDetails(@QueryParam("id") UUID orderId) {
+    public Response getOrderDetails(@QueryParam("id") String orderId) {
         if (orderId == null) {
             throw new WebApplicationException("Query parameter 'id' is required.", Response.Status.BAD_REQUEST);
         }
@@ -81,7 +81,7 @@ public class OrderResource {
             @QueryParam("page") @DefaultValue("1") int page,
             @QueryParam("page_size") @DefaultValue("5") int pageSize) {
 
-        UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
+        String currentUserId = jwtPrincipal.getName();
 
         // Django 视图从 GET.get('userId') 获取，我们从 JWT 获取
         PaginatedResult<OrderListDto> results = orderService.getOrdersByUserId(currentUserId, itemStatus, page, pageSize);
@@ -126,7 +126,7 @@ public class OrderResource {
     @GET
     @Path("/notification")
     public Response getNotificationCount() {
-        UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
+        String currentUserId = jwtPrincipal.getName();
         OrderNotificationCountDto count = orderService.getNotificationCount(currentUserId);
         return Response.ok(ApiResponseDto.success(count)).build();
     }
@@ -138,7 +138,7 @@ public class OrderResource {
     @PATCH
     @Path("/mark-notification")
     public Response markNotificationsAsRead() {
-        UUID currentUserId = UUID.fromString(jwtPrincipal.getName());
+        String currentUserId = jwtPrincipal.getName();
         orderService.markNotificationsAsRead(currentUserId);
         return Response.ok(ApiResponseDto.success()).build();
     }
@@ -177,7 +177,7 @@ public class OrderResource {
     @GET
     @Path("/admin/detail")
     @RolesAllowed("admin") //
-    public Response getAdminOrderDetail(@QueryParam("id") UUID orderId) {
+    public Response getAdminOrderDetail(@QueryParam("id") String orderId) {
         if (orderId == null) {
             throw new WebApplicationException("Query parameter 'id' is required.", Response.Status.BAD_REQUEST);
         }

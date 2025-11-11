@@ -12,8 +12,8 @@ public record ProductAdminInputDto(
         Integer lowStockThreshold,
         List<String> images,
         String status, // "0" or "1"
-        UUID subCategoryId,
-        List<DetailDto> details //
+        String subCategoryId,
+        List<DetailDto> details
 ) {
     /**
      * 嵌套 DTO，用于 product_details

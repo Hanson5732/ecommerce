@@ -1,22 +1,21 @@
 package com.rabbuy.ecommerce.dto;
 
-import java.util.UUID;
 
 public class CartItem {
-    private UUID id;
+    private String id;
     private int count;
 
     public CartItem() {
     }
 
-    public CartItem(UUID id, int count) {
+    public CartItem(String id, int count) {
         this.id = id;
         this.count = count;
     }
 
     // Getters and Setters
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
     public int getCount() { return count; }
     public void setCount(int count) { this.count = count; }
 

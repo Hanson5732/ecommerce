@@ -5,12 +5,10 @@ import com.rabbuy.ecommerce.entity.Product;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.UUID;
-import com.rabbuy.ecommerce.dto.ProductDetailItem;
 
 
 public record ProductDetailDto(
-        UUID id,
+        String id,
         String name,
         boolean status,
         BigDecimal price,
@@ -28,9 +26,9 @@ public record ProductDetailDto(
 ) {
 
     // 嵌套的 Record，用于分类信息
-    public record CategoryBriefDto(UUID id, String name) {}
+    public record CategoryBriefDto(String id, String name) {}
     // 嵌套的 Record，用于子分类信息
-    public record SubCategoryBriefDto(UUID id, String name) {}
+    public record SubCategoryBriefDto(String id, String name) {}
 
 
     /**

@@ -12,9 +12,6 @@ import org.jose4j.lang.JoseException;
 
 import jakarta.annotation.security.RolesAllowed;
 import org.eclipse.microprofile.jwt.JsonWebToken;
-import java.util.UUID;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.SecurityContext;
 
 @Path("/user") // 基础路径 /api/user
 @ApplicationScoped
@@ -79,7 +76,7 @@ public class UserResource {
     @PUT
     @Path("/{id}")
     @RolesAllowed({"admin", "customer"}) // 必须是 "admin" 或 "customer" 角色才能访问
-    public Response updateUserProfile(@PathParam("id") UUID id, UserProfileUpdateDto updateDto)
+    public Response updateUserProfile(@PathParam("id") String id, UserProfileUpdateDto updateDto)
             throws JoseException {
 
         // **授权检查 (Authorization)**

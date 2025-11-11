@@ -10,7 +10,6 @@ import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @ApplicationScoped
 public class SubCategoryDaoImpl implements SubCategoryDao {
@@ -19,7 +18,7 @@ public class SubCategoryDaoImpl implements SubCategoryDao {
     private EntityManager em;
 
     @Override
-    public Optional<SubCategory> findById(UUID id) {
+    public Optional<SubCategory> findById(String id) {
         return Optional.ofNullable(em.find(SubCategory.class, id));
     }
 
@@ -50,7 +49,7 @@ public class SubCategoryDaoImpl implements SubCategoryDao {
     }
 
     @Override
-    public long countByCategoryId(UUID categoryId) {
+    public long countByCategoryId(String categoryId) {
         //
         String jpql = "SELECT COUNT(s) FROM SubCategory s WHERE s.category.categoryId = :categoryId";
         return em.createQuery(jpql, Long.class)
@@ -89,7 +88,7 @@ public class SubCategoryDaoImpl implements SubCategoryDao {
     }
 
     @Override
-    public List<SubCategory> findActiveByCategoryId(UUID categoryId) {
+    public List<SubCategory> findActiveByCategoryId(String categoryId) {
         String jpql = "SELECT s FROM SubCategory s WHERE s.category.categoryId = :categoryId AND s.status = '1'";
         return em.createQuery(jpql, SubCategory.class)
                 .setParameter("categoryId", categoryId)

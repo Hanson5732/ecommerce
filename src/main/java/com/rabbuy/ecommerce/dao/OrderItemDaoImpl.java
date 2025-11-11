@@ -29,7 +29,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
     }
 
     @Override
-    public long countUnreadByUserId(UUID userId) {
+    public long countUnreadByUserId(String userId) {
         // (get_order_notification_view)
         // 通过 i.order.user.id 级联查询
         String jpql = "SELECT COUNT(i) FROM OrderItem i WHERE i.order.user.id = :userId AND i.isRead = false";
@@ -40,7 +40,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
 
     @Override
     @Transactional
-    public int markAllAsReadByUserId(UUID userId) {
+    public int markAllAsReadByUserId(String userId) {
         // (update_order_notification_view)
         // 使用 JPQL UPDATE 批量更新
         String jpql = "UPDATE OrderItem i SET i.isRead = true WHERE i.order.user.id = :userId AND i.isRead = false";
@@ -50,7 +50,7 @@ public class OrderItemDaoImpl implements OrderItemDao {
     }
 
     @Override
-    public long countByUserIdAndItemStatus(UUID userId, String itemStatus) {
+    public long countByUserIdAndItemStatus(String userId, String itemStatus) {
         String jpql = "SELECT COUNT(i) FROM OrderItem i WHERE i.order.user.id = :userId AND i.itemStatus = :itemStatus";
         return em.createQuery(jpql, Long.class)
                 .setParameter("userId", userId)

@@ -3,14 +3,11 @@ package com.rabbuy.ecommerce.service;
 import com.rabbuy.ecommerce.dto.AuthResponseDto;
 import com.rabbuy.ecommerce.dto.UserLoginDto;
 import com.rabbuy.ecommerce.dto.UserProfileUpdateDto;
-import com.rabbuy.ecommerce.dto.UserResponseDto;
 import com.rabbuy.ecommerce.dto.UserSignupDto;
 import jakarta.transaction.Transactional;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.lang.JoseException;
 import jakarta.ws.rs.NotFoundException;
-
-import java.util.UUID;
 
 public interface UserService {
 
@@ -36,5 +33,5 @@ public interface UserService {
      * 更新用户个人资料并返回新 Token
      */
     @Transactional // 确保 update 是事务性的
-    AuthResponseDto updateUserProfile(UUID userId, UserProfileUpdateDto updateDto) throws JoseException, NotFoundException, IllegalArgumentException;
+    AuthResponseDto updateUserProfile(String userId, UserProfileUpdateDto updateDto) throws JoseException, NotFoundException, IllegalArgumentException;
 }

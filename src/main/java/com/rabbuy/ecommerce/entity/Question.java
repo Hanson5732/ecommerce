@@ -1,19 +1,22 @@
 package com.rabbuy.ecommerce.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
 @Table(name = "question_question") // 表名
 public class Question {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // 或 GenerationType.UUID
-    @Column(name = "question_id", updatable = false, nullable = false)
-    private UUID questionId;
+    @GeneratedValue(generator = "uuid-hex")
+    @GenericGenerator(name = "uuid-hex", strategy = "org.hibernate.id.UUIDHexGenerator")
+    @Column(name = "question_id", updatable = false, nullable = false, columnDefinition = "CHAR(32)")
+    private String questionId;
 
     @Lob // 对应 TextField
     @Column(name = "content", nullable = false, columnDefinition = "TEXT")
@@ -75,8 +78,8 @@ public class Question {
     }
 
     // --- Getters and Setters ---
-    public UUID getQuestionId() { return questionId; }
-    public void setQuestionId(UUID questionId) { this.questionId = questionId; }
+    public String getQuestionId() { return questionId; }
+    public void setQuestionId(String questionId) { this.questionId = questionId; }
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
     public OffsetDateTime getCreatedTime() { return createdTime; }

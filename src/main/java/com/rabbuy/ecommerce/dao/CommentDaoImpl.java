@@ -59,7 +59,7 @@ public class CommentDaoImpl implements CommentDao {
     }
 
     @Override
-    public PaginatedResult<Comment> findByProductId(UUID productId, String ratingFilter, boolean hasImageOnly, int page, int pageSize) {
+    public PaginatedResult<Comment> findByProductId(String productId, String ratingFilter, boolean hasImageOnly, int page, int pageSize) {
         //
         StringBuilder jpql = new StringBuilder("SELECT c FROM Comment c WHERE c.product.productId = :productId");
         StringBuilder countJpql = new StringBuilder("SELECT COUNT(c) FROM Comment c WHERE c.product.productId = :productId");

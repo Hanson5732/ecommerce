@@ -118,7 +118,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public UUID validateRefreshToken(String refreshToken) throws JoseException, SecurityException {
+    public String validateRefreshToken(String refreshToken) throws JoseException, SecurityException {
         JwtConsumer jwtConsumer = new JwtConsumerBuilder()
                 .setRequireExpirationTime()
                 .setAllowedClockSkewInSeconds(30)
@@ -135,7 +135,7 @@ public class TokenServiceImpl implements TokenService {
             if (!"refresh".equals(tokenType)) {
                 throw new SecurityException("Invalid token type. Expected 'refresh'.");
             }
-            return UUID.fromString(claims.getSubject());
+            return claims.getSubject();
 
         } catch (InvalidJwtException e) {
             throw new SecurityException("Refresh token is invalid or expired.", e);

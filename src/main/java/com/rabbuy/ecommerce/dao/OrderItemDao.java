@@ -2,7 +2,6 @@ package com.rabbuy.ecommerce.dao;
 
 import com.rabbuy.ecommerce.entity.OrderItem;
 import java.util.Optional;
-import java.util.UUID;
 
 // OrderItem 数据访问对象接口
 public interface OrderItemDao {
@@ -20,13 +19,13 @@ public interface OrderItemDao {
     /**
      * 统计指定用户的未读订单项数量
      */
-    long countUnreadByUserId(UUID userId);
+    long countUnreadByUserId(String userId);
 
     /**
      * 将指定用户的所有未读订单项标记为已读
      * @return 更新的记录数
      */
-    int markAllAsReadByUserId(UUID userId);
+    int markAllAsReadByUserId(String userId);
 
     /**
      * 统计指定用户和特定状态的订单项数量
@@ -34,5 +33,5 @@ public interface OrderItemDao {
      * @param itemStatus
      * @return
      */
-    long countByUserIdAndItemStatus(UUID userId, String itemStatus);
+    long countByUserIdAndItemStatus(String userId, String itemStatus);
 }

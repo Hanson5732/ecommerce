@@ -32,7 +32,7 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public Optional<Product> findById(UUID id) {
+    public Optional<Product> findById(String id) {
         // 查找包括已删除或不可用的产品 (供管理员使用)
         return Optional.ofNullable(em.find(Product.class, id));
     }
@@ -80,7 +80,7 @@ public class ProductDaoImpl implements ProductDao {
     // --- 详情页查询 ---
 
     @Override
-    public Optional<Product> findActiveById(UUID id) {
+    public Optional<Product> findActiveById(String id) {
         // 对应 get_details_view
         String jpql = "SELECT p FROM Product p WHERE p.productId = :id AND p.status = '1' AND p.isDeleted = false";
         try {
@@ -95,7 +95,7 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public List<Product> findActiveRecommendations(String keyword, UUID excludeProductId, int limit) {
+    public List<Product> findActiveRecommendations(String keyword, String excludeProductId, int limit) {
         // 对应 get_product_recommend_view
         // Django __icontains 对应 LOWER(...) LIKE LOWER(...)
         String jpql = "SELECT p FROM Product p WHERE p.productId != :excludeId AND p.status = '1' AND p.isDeleted = false " +
@@ -150,7 +150,7 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public PaginatedResult<Product> findActiveBySubCategory(UUID subCategoryId, BigDecimal minPrice, BigDecimal maxPrice, String sortField, int page, int pageSize) {
+    public PaginatedResult<Product> findActiveBySubCategory(String subCategoryId, BigDecimal minPrice, BigDecimal maxPrice, String sortField, int page, int pageSize) {
         // 对应 get_subcategory_products_view
         StringBuilder jpql = new StringBuilder("SELECT p FROM Product p WHERE p.status = '1' AND p.isDeleted = false AND p.subCategory.subCateId = :subCategoryId");
         StringBuilder countJpql = new StringBuilder("SELECT COUNT(p) FROM Product p WHERE p.status = '1' AND p.isDeleted = false AND p.subCategory.subCateId = :subCategoryId");
@@ -295,7 +295,7 @@ public class ProductDaoImpl implements ProductDao {
     // ... (保留所有旧方法) ...
 
     @Override
-    public List<Product> findActiveBySubCategoryForRandom(UUID subCategoryId) {
+    public List<Product> findActiveBySubCategoryForRandom(String subCategoryId) {
         // 仅查询，不排序不分页，后续在 Service 层 shuffle
         String jpql = "SELECT p FROM Product p WHERE p.subCategory.subCateId = :subCategoryId AND p.status = '1' AND p.isDeleted = false";
         return em.createQuery(jpql, Product.class)

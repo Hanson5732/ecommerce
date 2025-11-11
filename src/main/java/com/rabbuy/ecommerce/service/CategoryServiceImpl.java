@@ -60,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Optional<CategoryAdminDto> getCategoryById(UUID id) {
+    public Optional<CategoryAdminDto> getCategoryById(String id) {
         return categoryDao.findById(id).map(this::toAdminDto);
     }
 
@@ -86,7 +86,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryAdminDto updateCategory(UUID id, CategoryInputDto categoryDto) {
+    public CategoryAdminDto updateCategory(String id, CategoryInputDto categoryDto) {
         //
         Category category = categoryDao.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category not found")); // 找不到则抛出异常
@@ -113,7 +113,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public void deleteCategory(UUID id) throws IllegalStateException {
+    public void deleteCategory(String id) throws IllegalStateException {
         //
         Category category = categoryDao.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category not found"));

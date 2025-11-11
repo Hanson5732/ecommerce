@@ -1,16 +1,19 @@
 package com.rabbuy.ecommerce.entity;
 
 import jakarta.persistence.*;
-import java.util.UUID;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "address_address")
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "address_id", updatable = false, nullable = false)
-    private UUID addressId;
+    @GeneratedValue(generator = "uuid-hex")
+    @GenericGenerator(name = "uuid-hex", strategy = "org.hibernate.id.UUIDHexGenerator")
+    @Column(name = "address_id", updatable = false, nullable = false, columnDefinition = "CHAR(32)")
+    private String addressId;
 
     @Column(name = "address_tag", nullable = false, length = 100)
     private String addressTag;
@@ -49,8 +52,8 @@ public class Address {
     }
 
     // --- Getters and Setters ---
-    public UUID getAddressId() { return addressId; }
-    public void setAddressId(UUID addressId) { this.addressId = addressId; }
+    public String getAddressId() { return addressId; }
+    public void setAddressId(String addressId) { this.addressId = addressId; }
     public String getAddressTag() { return addressTag; }
     public void setAddressTag(String addressTag) { this.addressTag = addressTag; }
     public User getUser() { return user; }

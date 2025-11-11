@@ -4,14 +4,13 @@ import com.rabbuy.ecommerce.dto.PaginatedResult;
 import com.rabbuy.ecommerce.entity.SubCategory;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface SubCategoryDao {
 
     /**
      * 根据 ID 查找
      */
-    Optional<SubCategory> findById(UUID id);
+    Optional<SubCategory> findById(String id);
 
     /**
      * 查找所有
@@ -29,7 +28,7 @@ public interface SubCategoryDao {
      * 统计某个主分类下的子分类数量
      * (用于 CategoryService.deleteCategory 检查)
      */
-    long countByCategoryId(UUID categoryId);
+    long countByCategoryId(String categoryId);
 
     /**
      * 保存 (新增)
@@ -57,5 +56,5 @@ public interface SubCategoryDao {
      * @param categoryId
      * @return
      */
-    List<SubCategory> findActiveByCategoryId(UUID categoryId);
+    List<SubCategory> findActiveByCategoryId(String categoryId);
 }

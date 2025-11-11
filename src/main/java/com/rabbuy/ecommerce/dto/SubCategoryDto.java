@@ -9,11 +9,11 @@ import java.util.UUID;
  *
  */
 public record SubCategoryDto(
-        UUID id,
+        String id,
         String name,
         String status,
         String imageUrl,
-        UUID categoryId,
+        String categoryId,
         String categoryName
 ) {
     /**
@@ -24,7 +24,7 @@ public record SubCategoryDto(
             return null;
         }
 
-        UUID catId = null;
+        String catId = null;
         String catName = null;
 
         // 确保父分类被加载（如果它是 LAZY）

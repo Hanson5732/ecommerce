@@ -15,17 +15,17 @@ public interface QuestionService {
      * 获取产品的所有问题及回答
      *
      */
-    List<QuestionResponseDto> getQuestionsByProductId(UUID productId);
+    List<QuestionResponseDto> getQuestionsByProductId(String productId);
 
     /**
      * 添加新问题
      *
      */
-    QuestionResponseDto addQuestion(UUID productId, UUID userId, QuestionAddDto dto) throws NotFoundException;
+    QuestionResponseDto addQuestion(String productId, String userId, QuestionAddDto dto) throws NotFoundException;
 
     /**
      * 添加新回答
      *
      */
-    AnswerResponseDto addAnswer(UUID questionId, UUID userId, AnswerAddDto dto) throws NotFoundException;
+    AnswerResponseDto addAnswer(String questionId, String userId, AnswerAddDto dto) throws NotFoundException;
 }

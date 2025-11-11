@@ -4,14 +4,13 @@ import com.rabbuy.ecommerce.entity.Product;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 /**
  * 用于 SubCategory 详情页的商品列表 DTO
  *
  */
 public record SubCategoryProductDto(
-        UUID id,
+        String id,
         String name,
         BigDecimal price,
         String image,

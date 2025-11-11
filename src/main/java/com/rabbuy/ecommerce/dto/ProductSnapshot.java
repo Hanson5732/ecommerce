@@ -5,7 +5,7 @@ import java.util.UUID;
 
 // POJO for the JSON snapshot stored in OrderItem.product
 public class ProductSnapshot {
-    private UUID id;
+    private String id;
     private String name;
     private BigDecimal price;
     private String image; // 存储第一张图片的 URL
@@ -14,7 +14,7 @@ public class ProductSnapshot {
     // 构造函数
     public ProductSnapshot() {}
 
-    public ProductSnapshot(UUID id, String name, BigDecimal price, String image, int count) {
+    public ProductSnapshot(String id, String name, BigDecimal price, String image, int count) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -23,8 +23,8 @@ public class ProductSnapshot {
     }
 
     // Getters and Setters
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public BigDecimal getPrice() { return price; }

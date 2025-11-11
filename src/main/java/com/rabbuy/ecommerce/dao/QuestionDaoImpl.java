@@ -8,7 +8,6 @@ import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @ApplicationScoped
 public class QuestionDaoImpl implements QuestionDao {
@@ -23,12 +22,12 @@ public class QuestionDaoImpl implements QuestionDao {
     }
 
     @Override
-    public Optional<Question> findById(UUID questionId) {
+    public Optional<Question> findById(String questionId) {
         return Optional.ofNullable(em.find(Question.class, questionId));
     }
 
     @Override
-    public List<Question> findByProductId(UUID productId) {
+    public List<Question> findByProductId(String productId) {
         //
         // 预加载 Answers, Question.User, Answer.User
         // 使用 LEFT JOIN FETCH 避免在没有答案时返回空

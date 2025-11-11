@@ -2,7 +2,6 @@ package com.rabbuy.ecommerce.resource;
 
 import com.rabbuy.ecommerce.dto.*;
 import jakarta.annotation.security.RolesAllowed;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 import com.rabbuy.ecommerce.service.ProductService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Path("/product") // 对应 /api/product
+@Path("/product")
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -35,7 +34,7 @@ public class ProductResource {
      */
     @GET
     @Path("/detail/{id}")
-    public Response getProductDetail(@PathParam("id") UUID productId) {
+    public Response getProductDetail(@PathParam("id") String productId) {
         // NotFoundException 会被 GlobalExceptionMapper 自动捕获
         ProductDetailDto productDetail = productService.getProductDetails(productId);
         return Response.ok(ApiResponseDto.success(productDetail)).build();
@@ -49,7 +48,7 @@ public class ProductResource {
      */
     @GET
     @Path("/detail/status")
-    public Response getProductStatus(@QueryParam("id") UUID productId) {
+    public Response getProductStatus(@QueryParam("id") String productId) {
         if (productId == null) {
             //
             throw new WebApplicationException("Missing product ID parameter", Response.Status.BAD_REQUEST);
@@ -93,7 +92,7 @@ public class ProductResource {
     @GET
     @Path("/recommend")
     public Response getRecommendations(
-            @QueryParam("id") UUID productId,
+            @QueryParam("id") String productId,
             @QueryParam("name") String name) {
 
         if (productId == null || name == null) {
@@ -151,7 +150,7 @@ public class ProductResource {
     @GET
     @Path("/admin/{id}")
     @RolesAllowed("admin") //
-    public Response getAdminProductDetail(@PathParam("id") UUID productId) {
+    public Response getAdminProductDetail(@PathParam("id") String productId) {
         ProductDetailDto productDetail = productService.getAdminProductDetails(productId);
         return Response.ok(ApiResponseDto.success(productDetail)).build();
     }
@@ -168,7 +167,7 @@ public class ProductResource {
     public Response addProduct(ProductAdminInputDto dto) {
         ProductDetailDto newProduct = productService.addProduct(dto);
         // Django 视图 返回 {'id': ...}
-        Map<String, UUID> response = new HashMap<>();
+        Map<String, String> response = new HashMap<>();
         response.put("id", newProduct.id());
         return Response.status(Response.Status.CREATED).entity(ApiResponseDto.success(response)).build();
     }
@@ -182,7 +181,7 @@ public class ProductResource {
     @PUT
     @Path("/update/{id}")
     @RolesAllowed("admin") //
-    public Response updateProduct(@PathParam("id") UUID productId, ProductAdminInputDto dto) {
+    public Response updateProduct(@PathParam("id") String productId, ProductAdminInputDto dto) {
         productService.updateProduct(productId, dto);
         return Response.ok(ApiResponseDto.success()).build();
     }
@@ -196,7 +195,7 @@ public class ProductResource {
     @DELETE // 使用 DELETE 动词
     @Path("/delete/{id}")
     @RolesAllowed("admin") //
-    public Response deleteProduct(@PathParam("id") UUID productId) {
+    public Response deleteProduct(@PathParam("id") String productId) {
         productService.deleteProduct(productId);
         return Response.ok(ApiResponseDto.success()).build();
     }

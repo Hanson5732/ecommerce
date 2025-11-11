@@ -2,18 +2,21 @@ package com.rabbuy.ecommerce.entity;
 
 import com.rabbuy.ecommerce.converter.StringListToJsonConverter;
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "category_category")
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "category_id", updatable = false, nullable = false)
-    private UUID categoryId;
+    @GeneratedValue(generator = "uuid-hex")
+    @GenericGenerator(name = "uuid-hex", strategy = "org.hibernate.id.UUIDHexGenerator")
+    @Column(name = "category_id", updatable = false, nullable = false, columnDefinition = "CHAR(32)")
+    private String categoryId;
 
     @Column(name = "category_name", nullable = false, length = 100)
     private String categoryName;
@@ -21,9 +24,8 @@ public class Category {
     @Column(name = "status", nullable = false, length = 1, columnDefinition = "VARCHAR(1) DEFAULT '0'")
     private String status = "0"; // "0"-禁用, "1"-启用
 
-    @Lob
-    @Column(name = "category_images", columnDefinition = "TEXT")
-    @Convert(converter = StringListToJsonConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "category_images", columnDefinition = "json")
     private List<String> categoryImages = new ArrayList<>();
 
     // JPA 需要一个无参构造函数
@@ -31,11 +33,11 @@ public class Category {
     }
 
     // Getters and Setters
-    public UUID getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(UUID categoryId) {
+    public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
 

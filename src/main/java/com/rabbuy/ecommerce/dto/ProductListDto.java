@@ -2,10 +2,9 @@ package com.rabbuy.ecommerce.dto;
 
 import com.rabbuy.ecommerce.entity.Product;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public record ProductListDto(
-        UUID id,
+        String id,
         String name,
         String description, // 搜索时需要
         BigDecimal price,

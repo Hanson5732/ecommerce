@@ -5,10 +5,9 @@ import com.rabbuy.ecommerce.entity.Product;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.UUID;
 
 public record ProductAdminListDto(
-        UUID id,
+        String id,
         String name,
         BigDecimal price,
         String status,

@@ -43,7 +43,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<AddressDto> getAddressesByUserId(UUID userId) {
+    public List<AddressDto> getAddressesByUserId(String userId) {
         //
         return addressDao.findByUserId(userId).stream()
                 .map(this::toDto)
@@ -52,7 +52,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional // 涉及数据库写入，需要事务
-    public AddressDto addAddress(UUID userId, AddressInputDto addressDto) throws IllegalStateException, NotFoundException {
+    public AddressDto addAddress(String userId, AddressInputDto addressDto) throws IllegalStateException, NotFoundException {
         //
         User user = userDao.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
@@ -95,7 +95,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public AddressDto updateAddress(UUID addressId, UUID currentUserId, AddressInputDto addressDto) throws NotFoundException, SecurityException {
+    public AddressDto updateAddress(String addressId, String currentUserId, AddressInputDto addressDto) throws NotFoundException, SecurityException {
         //
         Address address = addressDao.findById(addressId) //
                 .orElseThrow(() -> new NotFoundException("Address not found"));
@@ -129,7 +129,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Transactional
-    public void deleteAddress(UUID addressId, UUID currentUserId) throws NotFoundException, SecurityException {
+    public void deleteAddress(String addressId, String currentUserId) throws NotFoundException, SecurityException {
         //
         Address address = addressDao.findById(addressId) //
                 .orElseThrow(() -> new NotFoundException("Address not found"));
@@ -161,7 +161,7 @@ public class AddressServiceImpl implements AddressService {
      * @param excludeAddressId (可选) 要排除的地址ID（例如正在被设为默认的地址）
      */
     @Transactional
-    private void unsetOtherDefaults(UUID userId, UUID excludeAddressId) {
+    private void unsetOtherDefaults(String userId, String excludeAddressId) {
         // 查找该用户的所有非默认地址（此方法在 AddressDao 中）
         List<Address> defaults = addressDao.findNonDefaultsByUserId(userId);
 

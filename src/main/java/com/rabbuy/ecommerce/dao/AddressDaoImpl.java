@@ -18,12 +18,12 @@ public class AddressDaoImpl implements AddressDao {
     private EntityManager em;
 
     @Override
-    public Optional<Address> findById(UUID id) {
+    public Optional<Address> findById(String id) {
         return Optional.ofNullable(em.find(Address.class, id));
     }
 
     @Override
-    public List<Address> findByUserId(UUID userId) {
+    public List<Address> findByUserId(String userId) {
         // 按 is_default 降序排列，确保默认地址在前
         String jpql = "SELECT a FROM Address a WHERE a.user.id = :userId ORDER BY a.isDefault DESC";
         return em.createQuery(jpql, Address.class)
@@ -46,7 +46,7 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     @Override
-    public List<Address> findNonDefaultsByUserId(UUID userId) {
+    public List<Address> findNonDefaultsByUserId(String userId) {
         String jpql = "SELECT a FROM Address a WHERE a.user.id = :userId AND a.isDefault = false";
         return em.createQuery(jpql, Address.class)
                 .setParameter("userId", userId)
@@ -54,7 +54,7 @@ public class AddressDaoImpl implements AddressDao {
     }
 
     @Override
-    public long countByUserId(UUID userId) {
+    public long countByUserId(String userId) {
         String jpql = "SELECT COUNT(a) FROM Address a WHERE a.user.id = :userId";
         return em.createQuery(jpql, Long.class)
                 .setParameter("userId", userId)

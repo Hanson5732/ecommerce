@@ -11,7 +11,6 @@ import jakarta.ws.rs.NotFoundException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
@@ -49,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
         // 3. (在事务中) 处理订单项和库存
         for (int i = 0; i < createDto.products().size(); i++) {
             CartItem itemDto = createDto.products().get(i);
-            UUID productId = itemDto.getId();
+            String productId = itemDto.getId();
             int count = itemDto.getCount();
 
             Product product = productDao.findById(productId)
@@ -97,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
 
     // --- 获取订单详情 ---
     @Override
-    public OrderDetailResponseDto getOrderDetails(UUID orderId) throws NotFoundException {
+    public OrderDetailResponseDto getOrderDetails(String orderId) throws NotFoundException {
         //
         Order order = orderDao.findOrderWithItems(orderId)
                 .orElseThrow(() -> new NotFoundException("Order not found"));
@@ -211,11 +210,11 @@ public class OrderServiceImpl implements OrderService {
 
     // --- 获取客户订单列表（复杂） ---
     @Override
-    public PaginatedResult<OrderListDto> getOrdersByUserId(UUID userId, String itemStatus, int page, int pageSize) {
+    public PaginatedResult<OrderListDto> getOrdersByUserId(String userId, String itemStatus, int page, int pageSize) {
         //
 
         // 1. 获取相关 Order IDs
-        List<UUID> orderIds;
+        List<String> orderIds;
         if (itemStatus != null && !itemStatus.isEmpty() && !"all".equals(itemStatus) && !"undefined".equals(itemStatus)) {
             orderIds = orderDao.findOrderIdsByUserIdAndItemStatus(userId, itemStatus);
         } else {
@@ -230,7 +229,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = orderDao.findOrdersWithItemsByOrderIds(orderIds);
 
         // 3. 在内存中分组、排序
-        Map<UUID, OrderListDto> orderMap = new HashMap<>();
+        Map<String, OrderListDto> orderMap = new HashMap<>();
 
         for (Order order : orders) {
             BigDecimal totalAmount = BigDecimal.ZERO;
@@ -321,7 +320,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderNotificationCountDto getNotificationCount(UUID userId) {
+    public OrderNotificationCountDto getNotificationCount(String userId) {
         //
         long count = orderItemDao.countUnreadByUserId(userId);
         return new OrderNotificationCountDto(count);
@@ -329,13 +328,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void markNotificationsAsRead(UUID userId) {
+    public void markNotificationsAsRead(String userId) {
         //
         orderItemDao.markAllAsReadByUserId(userId);
     }
 
     @Override
-    public HomeMessageCountDto getMessageCountsByUserId(UUID userId) {
+    public HomeMessageCountDto getMessageCountsByUserId(String userId) {
         long unpaid = orderItemDao.countByUserIdAndItemStatus(userId, "0");
         long pending = orderItemDao.countByUserIdAndItemStatus(userId, "1");
         long review = orderItemDao.countByUserIdAndItemStatus(userId, "5");
@@ -357,7 +356,7 @@ public class OrderServiceImpl implements OrderService {
         // 唯一的区别是它查询所有用户。
 
         // 1. 获取相关 Order IDs (不限制 userId)
-        List<UUID> orderIds;
+        List<String> orderIds;
         if (itemStatus != null && !itemStatus.isEmpty() && !"all".equals(itemStatus) && !"undefined".equals(itemStatus)) {
             orderIds = orderDao.findOrderIdsByItemStatus(itemStatus);
         } else {
@@ -372,7 +371,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders = orderDao.findOrdersWithItemsByOrderIds(orderIds);
 
         // 3. 在内存中分组、排序 (与 getOrdersByUserId 的逻辑相同)
-        Map<UUID, OrderListDto> orderMap = new HashMap<>();
+        Map<String, OrderListDto> orderMap = new HashMap<>();
 
         for (Order order : orders) {
             BigDecimal totalAmount = BigDecimal.ZERO;
@@ -437,7 +436,7 @@ public class OrderServiceImpl implements OrderService {
      *
      */
     @Override
-    public OrderDetailResponseDto getAdminOrderDetail(UUID orderId) throws NotFoundException {
+    public OrderDetailResponseDto getAdminOrderDetail(String orderId) throws NotFoundException {
         // Django 的管理员视图和客户视图
         // (get_order_detail_view vs get_order_view)
         // 使用相同的逻辑和序列化器。

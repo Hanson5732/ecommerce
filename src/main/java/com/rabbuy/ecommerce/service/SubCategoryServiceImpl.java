@@ -31,7 +31,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
     private ProductDao productDao;
 
     @Override
-    public SubCategoryDto getSubCategoryDetails(UUID id) throws NotFoundException {
+    public SubCategoryDto getSubCategoryDetails(String id) throws NotFoundException {
         //
         SubCategory subCategory = subCategoryDao.findById(id)
                 .orElseThrow(() -> new NotFoundException("Sub-category not found"));
@@ -40,7 +40,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
     @Override
     public PaginatedResult<SubCategoryProductDto> getSubCategoryProducts(
-            UUID subCategoryId, BigDecimal minPrice, BigDecimal maxPrice,
+            String subCategoryId, BigDecimal minPrice, BigDecimal maxPrice,
             String sortField, int page, int pageSize) throws NotFoundException {
 
         // 1. 验证 SubCategory 是否存在
@@ -115,7 +115,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
     @Override
     @Transactional
-    public SubCategoryDto updateSubCategory(UUID id, SubCategoryInputDto dto) throws NotFoundException, IllegalArgumentException {
+    public SubCategoryDto updateSubCategory(String id, SubCategoryInputDto dto) throws NotFoundException, IllegalArgumentException {
         //
         SubCategory subCategory = subCategoryDao.findById(id)
                 .orElseThrow(() -> new NotFoundException("Subcategory not found"));
@@ -141,7 +141,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
     @Override
     @Transactional
-    public void deleteSubCategory(UUID id) throws NotFoundException, IllegalStateException {
+    public void deleteSubCategory(String id) throws NotFoundException, IllegalStateException {
         //
         if (!subCategoryDao.findById(id).isPresent()) {
             throw new NotFoundException("Subcategory not found");

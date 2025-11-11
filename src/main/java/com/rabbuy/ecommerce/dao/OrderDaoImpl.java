@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @ApplicationScoped
 public class OrderDaoImpl implements OrderDao {
@@ -36,7 +35,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Optional<Order> findOrderWithItems(UUID orderId) {
+    public Optional<Order> findOrderWithItems(String orderId) {
         // 使用 "LEFT JOIN FETCH o.items" 来在查询 Order 时立即加载关联的 OrderItem 列表
         String jpql = "SELECT o FROM Order o LEFT JOIN FETCH o.items WHERE o.orderId = :orderId";
         try {
@@ -51,26 +50,26 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<UUID> findOrderIdsByUserId(UUID userId) {
+    public List<String> findOrderIdsByUserId(String userId) {
         // 从 OrderItem 反向查询其 Order ID
         String jpql = "SELECT DISTINCT i.order.orderId FROM OrderItem i WHERE i.order.user.id = :userId";
-        return em.createQuery(jpql, UUID.class)
+        return em.createQuery(jpql)
                 .setParameter("userId", userId)
                 .getResultList();
     }
 
     @Override
-    public List<UUID> findOrderIdsByUserIdAndItemStatus(UUID userId, String itemStatus) {
+    public List<String> findOrderIdsByUserIdAndItemStatus(String userId, String itemStatus) {
         //
         String jpql = "SELECT DISTINCT i.order.orderId FROM OrderItem i WHERE i.order.user.id = :userId AND i.itemStatus = :itemStatus";
-        return em.createQuery(jpql, UUID.class)
+        return em.createQuery(jpql)
                 .setParameter("userId", userId)
                 .setParameter("itemStatus", itemStatus)
                 .getResultList();
     }
 
     @Override
-    public List<Order> findOrdersWithItemsByOrderIds(List<UUID> orderIds) {
+    public List<Order> findOrdersWithItemsByOrderIds(List<String> orderIds) {
         if (orderIds == null || orderIds.isEmpty()) {
             return new ArrayList<>();
         }
@@ -125,28 +124,30 @@ public class OrderDaoImpl implements OrderDao {
 
     /**
      * 按订单项状态查找所有订单 ID (管理员)
+     *
      * @param itemStatus
      * @return
      */
     @Override
-    public List<UUID> findOrderIdsByItemStatus(String itemStatus) {
+    public List<String> findOrderIdsByItemStatus(String itemStatus) {
         // 我们需要查询 OrderItem 表，并按 itemStatus 过滤，
         // 然后返回不重复的 Order ID 列表
         String jpql = "SELECT DISTINCT i.order.orderId FROM OrderItem i WHERE i.itemStatus = :itemStatus";
-        return em.createQuery(jpql, UUID.class)
+        return em.createQuery(jpql)
                 .setParameter("itemStatus", itemStatus)
                 .getResultList();
     }
 
     /**
      * 查找所有订单 ID (管理员)
+     *
      * @return
      */
     @Override
-    public List<UUID> findAllOrderIds() {
+    public List<String> findAllOrderIds() {
         // 直接从 Order 表返回所有 ID
         String jpql = "SELECT o.orderId FROM Order o";
-        return em.createQuery(jpql, UUID.class)
+        return em.createQuery(jpql)
                 .getResultList();
     }
 }

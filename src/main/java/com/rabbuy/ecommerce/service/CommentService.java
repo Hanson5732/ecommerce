@@ -8,15 +8,13 @@ import com.rabbuy.ecommerce.dto.PaginatedResult;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 
-import java.util.UUID;
-
 public interface CommentService {
 
     /**
      * 获取产品评论（分页）
      *
      */
-    PaginatedResult<CommentResponseDto> getProductComments(UUID productId, String ratingFilter, boolean hasImageOnly, int page, int pageSize);
+    PaginatedResult<CommentResponseDto> getProductComments(String productId, String ratingFilter, boolean hasImageOnly, int page, int pageSize);
 
     /**
      * 添加评论（包含更新产品评分和订单项状态的业务逻辑）

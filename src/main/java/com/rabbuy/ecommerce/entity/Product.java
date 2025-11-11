@@ -3,21 +3,25 @@ package com.rabbuy.ecommerce.entity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 import com.rabbuy.ecommerce.converter.StringListToJsonConverter;
 import java.util.ArrayList;
 import java.util.List;
 import com.rabbuy.ecommerce.converter.ProductDetailConverter;
 import com.rabbuy.ecommerce.dto.ProductDetailItem;
+import org.hibernate.annotations.GenericGenerator;
+import jakarta.persistence.Convert;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "product_product")
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "product_id", updatable = false, nullable = false)
-    private UUID productId;
+    @GeneratedValue(generator = "uuid-hex")
+    @GenericGenerator(name = "uuid-hex", strategy = "org.hibernate.id.UUIDHexGenerator")
+    @Column(name = "product_id", updatable = false, nullable = false, columnDefinition = "CHAR(32)")
+    private String productId;
 
     @Column(name = "product_name", nullable = false, length = 255)
     private String productName;
@@ -29,9 +33,8 @@ public class Product {
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Lob
-    @Column(name = "images", nullable = false, columnDefinition = "TEXT DEFAULT '[]'")
-    @Convert(converter = StringListToJsonConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "images", nullable = false, columnDefinition = "json DEFAULT '[]'")
     private List<String> images = new ArrayList<>();
 
     @Column(name = "stock_quantity", nullable = false)
@@ -40,9 +43,8 @@ public class Product {
     @Column(name = "low_stock_threshold", nullable = false)
     private Integer lowStockThreshold;
 
-    @Lob
-    @Column(name = "product_details", nullable = false, columnDefinition = "TEXT DEFAULT '[]'")
-    @Convert(converter = ProductDetailConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "product_details", nullable = false, columnDefinition = "json DEFAULT '[]'")
     private List<ProductDetailItem> productDetails = new ArrayList<>();
 
     @Column(name = "product_rating", nullable = false, columnDefinition = "DOUBLE PRECISION DEFAULT 0.0")
@@ -77,8 +79,8 @@ public class Product {
     }
 
     // --- Getters and Setters ---
-    public UUID getProductId() { return productId; }
-    public void setProductId(UUID productId) { this.productId = productId; }
+    public String getProductId() { return productId; }
+    public void setProductId(String productId) { this.productId = productId; }
     public String getProductName() { return productName; }
     public void setProductName(String productName) { this.productName = productName; }
     public String getProductDesc() { return productDesc; }

@@ -17,7 +17,7 @@ public class CartDaoImpl implements CartDao {
     private EntityManager em;
 
     @Override
-    public Optional<Cart> findByUserId(UUID userId) {
+    public Optional<Cart> findByUserId(String userId) {
         //
         // Cart 与 User 是一对一关系
         String jpql = "SELECT c FROM Cart c WHERE c.user.id = :userId";
@@ -33,7 +33,7 @@ public class CartDaoImpl implements CartDao {
     }
 
     @Override
-    public Optional<Cart> findById(UUID cartId) {
+    public Optional<Cart> findById(String cartId) {
         return Optional.ofNullable(em.find(Cart.class, cartId));
     }
 

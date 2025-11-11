@@ -6,24 +6,27 @@ import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import org.hibernate.annotations.GenericGenerator;
+import jakarta.persistence.Convert;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "cart_cart")
 public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "cart_id", updatable = false, nullable = false)
-    private UUID cartId;
+    @GeneratedValue(generator = "uuid-hex")
+    @GenericGenerator(name = "uuid-hex", strategy = "org.hibernate.id.UUIDHexGenerator")
+    @Column(name = "cart_id", updatable = false, nullable = false, columnDefinition = "CHAR(32)")
+    private String cartId;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    @Lob
-    @Column(name = "products", nullable = false, columnDefinition = "TEXT")
-    @Convert(converter = CartItemListToJsonConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "products", nullable = false, columnDefinition = "json")
     private List<CartItem> products = new ArrayList<>();
 
     @Column(name = "created_time", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
@@ -54,8 +57,8 @@ public class Cart {
     }
 
     // --- Getters and Setters ---
-    public UUID getCartId() { return cartId; }
-    public void setCartId(UUID cartId) { this.cartId = cartId; }
+    public String getCartId() { return cartId; }
+    public void setCartId(String cartId) { this.cartId = cartId; }
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 

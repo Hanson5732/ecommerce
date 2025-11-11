@@ -3,14 +3,13 @@ package com.rabbuy.ecommerce.dao;
 import com.rabbuy.ecommerce.entity.User;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 // User 数据访问对象接口
 public interface UserDao {
 
     void save(User user); // 保存（创建或更新）
 
-    Optional<User> findById(UUID id); // 根据 ID 查找
+    Optional<User> findById(String id); // 根据 ID 查找
 
     Optional<User> findByUsername(String username); // 根据用户名查找
 
@@ -22,7 +21,7 @@ public interface UserDao {
 
     void delete(User user); // 删除
 
-    void deleteById(UUID id); // 根据 ID 删除
+    void deleteById(String id); // 根据 ID 删除
 
     boolean existsByUsername(String username); // 检查用户名是否存在
 
