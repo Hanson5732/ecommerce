@@ -20,7 +20,7 @@ import org.jose4j.lang.JoseException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Collections;
-import java.util.UUID;
+import java.util.Base64;
 
 @ApplicationScoped
 public class TokenServiceImpl implements TokenService {
@@ -42,8 +42,6 @@ public class TokenServiceImpl implements TokenService {
     @Inject
     @ConfigProperty(name = "mp.jwt.issuer", defaultValue = "com.rabbuy.ecommerce")
     private String issuer; // 注入签发者
-
-    // Key 对象现在在 getSigningKey() 中动态创建
     private Key signingKey = null;
 
     /**
@@ -55,7 +53,8 @@ public class TokenServiceImpl implements TokenService {
             if (secretKeyString == null || secretKeyString.getBytes(StandardCharsets.UTF_8).length < 32) {
                 throw new RuntimeException("JWT Secret Key is not configured or is too short (must be >= 32 bytes)");
             }
-            this.signingKey = new HmacKey(secretKeyString.getBytes(StandardCharsets.UTF_8));
+            byte[] secretBytes = Base64.getDecoder().decode(secretKeyString);
+            this.signingKey = new HmacKey(secretBytes);
         }
         return this.signingKey;
     }
@@ -111,7 +110,8 @@ public class TokenServiceImpl implements TokenService {
         JsonWebSignature jws = new JsonWebSignature();
         jws.setPayload(claims.toJson());
         jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.HMAC_SHA256);
-        jws.setKey(getSigningKey()); // 使用 getSigningKey()
+        jws.setHeader("typ", "JWT");
+        jws.setKey(getSigningKey());
         jws.setDoKeyValidation(false);
 
         return jws.getCompactSerialization();
