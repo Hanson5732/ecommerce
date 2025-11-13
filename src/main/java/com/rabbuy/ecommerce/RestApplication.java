@@ -3,7 +3,7 @@ package com.rabbuy.ecommerce;
 import jakarta.annotation.security.DeclareRoles;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.security.enterprise.authentication.mechanism.http.LoginToContinue;
-import org.eclipse.microprofile.auth.LoginConfig; // 导入 MP-JWT
+import org.eclipse.microprofile.auth.LoginConfig;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
 

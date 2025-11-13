@@ -65,7 +65,7 @@ public class UserResource {
         }
         // 业务异常 (SecurityException, JoseException) 将被 GlobalExceptionMapper 捕获
         AuthResponseDto authResponse = userService.refreshUserToken(refreshDto.refresh());
-        return Response.ok(ApiResponseDto.success(authResponse)).build();
+        return Response.ok(authResponse).build();
     }
 
     /**
@@ -90,7 +90,7 @@ public class UserResource {
 
         // 检查 3: 用户是否在尝试修改自己的个人资料？
         // jwtPrincipal.getName() 返回的是 'sub' 声明，即 User ID
-        boolean isSelf = jwtPrincipal.getName().equals(id.toString());
+        boolean isSelf = jwtPrincipal.getName().equals(id);
 
         //
         // 业务逻辑：如果不是管理员，并且也不是在修改自己的资料，则禁止

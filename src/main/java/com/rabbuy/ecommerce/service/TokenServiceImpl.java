@@ -28,19 +28,19 @@ public class TokenServiceImpl implements TokenService {
     // --- 1. 注入配置属性 ---
 
     @Inject
-    @ConfigProperty(name = "jwt.secret.key")
+    @ConfigProperty(name = "mp.jwt.secret.key")
     private String secretKeyString; // 从 .properties 文件注入
 
     @Inject
-    @ConfigProperty(name = "jwt.lifetime.access.minutes", defaultValue = "15")
+    @ConfigProperty(name = "mp.jwt.lifetime.access.minutes", defaultValue = "15")
     private Integer accessTokenLifetimeMinutes; // 注入为 Integer
 
     @Inject
-    @ConfigProperty(name = "jwt.lifetime.refresh.days", defaultValue = "7")
+    @ConfigProperty(name = "mp.jwt.lifetime.refresh.days", defaultValue = "7")
     private Integer refreshTokenLifetimeDays; // 注入为 Integer
 
     @Inject
-    @ConfigProperty(name = "jwt.issuer", defaultValue = "com.rabbuy.ecommerce")
+    @ConfigProperty(name = "mp.jwt.issuer", defaultValue = "com.rabbuy.ecommerce")
     private String issuer; // 注入签发者
 
     // Key 对象现在在 getSigningKey() 中动态创建
