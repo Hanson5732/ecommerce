@@ -10,8 +10,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0afd84e9-493a-4af3-8e0c-2907d14352e8" name="Changes" comment="Rebuild Except JWT Auth function.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/filter/JwtAuthFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/RestApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/RestApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dao/ProductDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dao/ProductDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/ProductSearchCriteria.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/dto/ProductSearchCriteria.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/AddressResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/AddressResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/CartResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/CartResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/HomeResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/HomeResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/OrderResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/OrderResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/ProductResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/ProductResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/QuestionResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/QuestionResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/UserResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/resource/UserResource.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/TokenServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/rabbuy/ecommerce/service/TokenServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/microprofile-config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/microprofile-config.properties" afterDir="false" />
     </list>
@@ -179,7 +189,7 @@
       <workItem from="1762603639045" duration="12890000" />
       <workItem from="1762691111696" duration="9775000" />
       <workItem from="1762779316122" duration="18434000" />
-      <workItem from="1763020668572" duration="10024000" />
+      <workItem from="1763020668572" duration="17260000" />
     </task>
     <task id="LOCAL-00001" summary="Rebuild Dao &amp; entity Finish.">
       <option name="closed" value="true" />

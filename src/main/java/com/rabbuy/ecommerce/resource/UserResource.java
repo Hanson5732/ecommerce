@@ -11,7 +11,8 @@ import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.lang.JoseException;
 
 import jakarta.annotation.security.RolesAllowed;
-import org.eclipse.microprofile.jwt.JsonWebToken;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.Context;
 
 @Path("/user") // 基础路径 /api/user
 @ApplicationScoped
@@ -22,8 +23,9 @@ public class UserResource {
     @Inject
     private UserService userService;
 
-    @Inject
-    private JsonWebToken jwtPrincipal;
+    @Context
+    private SecurityContext securityContext;
+
 
     /**
      * 注册新用户
@@ -81,16 +83,16 @@ public class UserResource {
 
         // **授权检查 (Authorization)**
         // 检查 1: 确保 JWT 已被注入
-        if (jwtPrincipal == null || jwtPrincipal.getName() == null) {
+        if (securityContext.getUserPrincipal() == null || securityContext.getUserPrincipal().getName() == null) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
 
         // 检查 2: 用户是否是管理员？
-        boolean isAdmin = jwtPrincipal.getGroups().contains("admin");
+        boolean isAdmin = securityContext.isUserInRole("admin");
 
         // 检查 3: 用户是否在尝试修改自己的个人资料？
         // jwtPrincipal.getName() 返回的是 'sub' 声明，即 User ID
-        boolean isSelf = jwtPrincipal.getName().equals(id);
+        boolean isSelf = securityContext.getUserPrincipal().getName().equals(id);
 
         //
         // 业务逻辑：如果不是管理员，并且也不是在修改自己的资料，则禁止

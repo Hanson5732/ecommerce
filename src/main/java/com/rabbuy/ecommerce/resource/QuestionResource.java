@@ -8,10 +8,10 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.jwt.JsonWebToken;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.Context;
 
 import java.util.List;
-import java.util.UUID;
 
 @Path("/question")
 @ApplicationScoped
@@ -22,8 +22,8 @@ public class QuestionResource {
     @Inject
     private QuestionService questionService;
 
-    @Inject // 注入 JWT 以获取当前用户信息
-    private JsonWebToken jwtPrincipal;
+    @Context
+    private SecurityContext securityContext;
 
     /**
      * 获取产品的问题列表
@@ -47,7 +47,7 @@ public class QuestionResource {
     @Path("/product/{productId}/add")
     @RolesAllowed({"admin", "customer"}) // (@token_required)
     public Response addQuestion(@PathParam("productId") String productId, QuestionAddDto questionDto) {
-        String currentUserId = jwtPrincipal.getName();
+        String currentUserId = securityContext.getUserPrincipal().getName();
 
         // 异常 (NotFound, IllegalArgument) 将被 GlobalExceptionMapper 捕获
         QuestionResponseDto newQuestion = questionService.addQuestion(productId, currentUserId, questionDto);
@@ -64,7 +64,7 @@ public class QuestionResource {
     @Path("/answer/{questionId}/add")
     @RolesAllowed({"admin", "customer"}) // (@token_required)
     public Response addAnswer(@PathParam("questionId") String questionId, AnswerAddDto answerDto) {
-        String currentUserId = jwtPrincipal.getName();
+        String currentUserId = securityContext.getUserPrincipal().getName();
 
         // 异常 (NotFound, IllegalArgument) 将被 GlobalExceptionMapper 捕获
         AnswerResponseDto newAnswer = questionService.addAnswer(questionId, currentUserId, answerDto);

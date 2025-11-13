@@ -242,7 +242,7 @@ public class ProductDaoImpl implements ProductDao {
     // --- 动态查询辅助方法 ---
 
     private void buildSearchWhereClause(StringBuilder jpql, StringBuilder countJpql, Map<String, Object> parameters,
-                                        String keyword, UUID categoryId, BigDecimal minPrice, BigDecimal maxPrice) {
+                                        String keyword, String categoryId, BigDecimal minPrice, BigDecimal maxPrice) {
 
         // 关键词搜索 (name 或 description)
         if (keyword != null && !keyword.trim().isEmpty()) {

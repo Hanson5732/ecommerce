@@ -10,10 +10,10 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.jwt.JsonWebToken;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.Context;
 
 import java.util.List;
-import java.util.UUID;
 
 @Path("/cart")
 @ApplicationScoped
@@ -25,8 +25,8 @@ public class CartResource {
     @Inject
     private CartService cartService;
 
-    @Inject // 注入已认证的 JWT
-    private JsonWebToken jwtPrincipal;
+    @Context
+    private SecurityContext securityContext;
 
     /**
      * 获取当前用户的购物车详情
@@ -36,7 +36,7 @@ public class CartResource {
     @GET
     public Response getCart() {
         // 从 JWT 获取用户 ID，而不是像 Django 那样从查询参数获取
-        String currentUserId = jwtPrincipal.getName();
+        String currentUserId = securityContext.getUserPrincipal().getName();
 
         // NotFoundException 会被 GlobalExceptionMapper 自动捕获
         CartResponseDto cart = cartService.getCartByUserId(currentUserId);
@@ -52,7 +52,7 @@ public class CartResource {
     @POST
     @Path("/save")
     public Response saveCart(List<CartItem> cartItems) {
-        String currentUserId = jwtPrincipal.getName();
+        String currentUserId = securityContext.getUserPrincipal().getName();
 
         if (cartItems == null) {
             throw new WebApplicationException("Request body (list of products) is required.", Response.Status.BAD_REQUEST);

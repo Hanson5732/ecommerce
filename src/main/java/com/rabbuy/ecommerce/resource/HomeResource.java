@@ -15,11 +15,12 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.jwt.JsonWebToken;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.Context;
 import com.rabbuy.ecommerce.dto.RecommendCategoryResponseDto;
 
 import java.util.List;
-import java.util.UUID;
+
 
 @Path("/home") // 对应 /api/home
 @ApplicationScoped
@@ -33,8 +34,8 @@ public class HomeResource {
     @Inject
     private OrderService orderService;
 
-    @Inject
-    private JsonWebToken jwtPrincipal;
+    @Context
+    private SecurityContext securityContext;
 
     /**
      * 获取新上架商品
@@ -90,7 +91,7 @@ public class HomeResource {
     @Path("/message")
     @RolesAllowed({"admin", "customer"}) // (token_required)
     public Response getMessageCounts() {
-        String currentUserId = jwtPrincipal.getName();
+        String currentUserId = securityContext.getUserPrincipal().getName();
         HomeMessageCountDto counts = orderService.getMessageCountsByUserId(currentUserId);
         return Response.ok(ApiResponseDto.success(counts)).build();
     }

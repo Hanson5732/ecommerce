@@ -8,12 +8,13 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.Context;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Path("/product")
 @ApplicationScoped
@@ -24,8 +25,8 @@ public class ProductResource {
     @Inject
     private ProductService productService;
 
-//    @Inject
-//    private JsonWebToken jwtPrincipal;
+    @Context
+    private SecurityContext securityContext;
 
     /**
      * 获取商品详情
@@ -67,7 +68,7 @@ public class ProductResource {
     @Path("/search")
     public Response searchProducts(
             @QueryParam("q") @DefaultValue("") String keyword,
-            @QueryParam("category") UUID categoryId, //
+            @QueryParam("category") String categoryId, //
             @QueryParam("page") @DefaultValue("1") int page,
             @QueryParam("pageSize") @DefaultValue("10") int pageSize,
             @QueryParam("sortField") @DefaultValue("default") String sortField,

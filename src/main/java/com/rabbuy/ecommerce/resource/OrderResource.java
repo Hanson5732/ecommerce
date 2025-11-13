@@ -9,11 +9,11 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.eclipse.microprofile.jwt.JsonWebToken;
+import jakarta.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.Context;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Path("/order")
 @ApplicationScoped
@@ -25,8 +25,8 @@ public class OrderResource {
     @Inject
     private OrderService orderService;
 
-    @Inject
-    private JsonWebToken jwtPrincipal;
+    @Context
+    private SecurityContext securityContext;
 
     /**
      * 创建订单
@@ -81,7 +81,7 @@ public class OrderResource {
             @QueryParam("page") @DefaultValue("1") int page,
             @QueryParam("page_size") @DefaultValue("5") int pageSize) {
 
-        String currentUserId = jwtPrincipal.getName();
+        String currentUserId = securityContext.getUserPrincipal().getName();
 
         // Django 视图从 GET.get('userId') 获取，我们从 JWT 获取
         PaginatedResult<OrderListDto> results = orderService.getOrdersByUserId(currentUserId, itemStatus, page, pageSize);
@@ -126,7 +126,7 @@ public class OrderResource {
     @GET
     @Path("/notification")
     public Response getNotificationCount() {
-        String currentUserId = jwtPrincipal.getName();
+        String currentUserId = securityContext.getUserPrincipal().getName();
         OrderNotificationCountDto count = orderService.getNotificationCount(currentUserId);
         return Response.ok(ApiResponseDto.success(count)).build();
     }
@@ -138,7 +138,7 @@ public class OrderResource {
     @PATCH
     @Path("/mark-notification")
     public Response markNotificationsAsRead() {
-        String currentUserId = jwtPrincipal.getName();
+        String currentUserId = securityContext.getUserPrincipal().getName();
         orderService.markNotificationsAsRead(currentUserId);
         return Response.ok(ApiResponseDto.success()).build();
     }
