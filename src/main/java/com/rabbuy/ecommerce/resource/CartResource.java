@@ -4,7 +4,6 @@ import com.rabbuy.ecommerce.dto.ApiResponseDto;
 import com.rabbuy.ecommerce.dto.CartItem;
 import com.rabbuy.ecommerce.dto.CartResponseDto;
 import com.rabbuy.ecommerce.service.CartService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -19,7 +18,6 @@ import java.util.List;
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RolesAllowed({"admin", "customer"}) // 保护此资源下的所有端点
 public class CartResource {
 
     @Inject

@@ -10,7 +10,6 @@ import jakarta.ws.rs.core.Response;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.lang.JoseException;
 
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.core.Context;
 
@@ -77,7 +76,6 @@ public class UserResource {
      */
     @PUT
     @Path("/{id}")
-    @RolesAllowed({"admin", "customer"}) // 必须是 "admin" 或 "customer" 角色才能访问
     public Response updateUserProfile(@PathParam("id") String id, UserProfileUpdateDto updateDto)
             throws JoseException {
 

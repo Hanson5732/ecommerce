@@ -59,14 +59,19 @@ public class JwtAuthFilter implements ContainerRequestFilter {
      */
     private JwtConsumer getJwtConsumer() {
         if (this.jwtConsumer == null) {
+            AlgorithmConstraints algConstraints = new AlgorithmConstraints(
+                    AlgorithmConstraints.ConstraintType.PERMIT,
+                    AlgorithmIdentifiers.HMAC_SHA256
+            );
+
             this.jwtConsumer = new JwtConsumerBuilder()
-                    .setRequireExpirationTime() // 必须有过期时间
-                    .setAllowedClockSkewInSeconds(30) // 允许 30 秒时钟偏差
-                    .setRequireSubject() // 必须有 "sub" (用户ID)
-                    .setExpectedIssuer(this.issuer) // 必须匹配签发者
-                    .setExpectedAudience("ecommerce-clients") // 必须匹配受众
+                    .setRequireExpirationTime()
+                    .setAllowedClockSkewInSeconds(30)
+                    .setRequireSubject()
+                    .setExpectedIssuer(this.issuer)
+                    .setExpectedAudience("ecommerce-clients")
                     .setVerificationKey(getKey())
-                    .setJwsAlgorithmConstraints(AlgorithmConstraints.ConstraintType.valueOf(AlgorithmIdentifiers.HMAC_SHA256))
+                    .setJwsAlgorithmConstraints(algConstraints)
                     .build();
         }
         return this.jwtConsumer;

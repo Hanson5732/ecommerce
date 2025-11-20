@@ -2,7 +2,6 @@ package com.rabbuy.ecommerce.resource;
 
 import com.rabbuy.ecommerce.dto.*;
 import com.rabbuy.ecommerce.service.QuestionService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -45,7 +44,6 @@ public class QuestionResource {
      */
     @POST
     @Path("/product/{productId}/add")
-    @RolesAllowed({"admin", "customer"}) // (@token_required)
     public Response addQuestion(@PathParam("productId") String productId, QuestionAddDto questionDto) {
         String currentUserId = securityContext.getUserPrincipal().getName();
 
@@ -62,7 +60,6 @@ public class QuestionResource {
      */
     @POST
     @Path("/answer/{questionId}/add")
-    @RolesAllowed({"admin", "customer"}) // (@token_required)
     public Response addAnswer(@PathParam("questionId") String questionId, AnswerAddDto answerDto) {
         String currentUserId = securityContext.getUserPrincipal().getName();
 

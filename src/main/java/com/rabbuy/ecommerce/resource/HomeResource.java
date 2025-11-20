@@ -6,7 +6,6 @@ import com.rabbuy.ecommerce.dto.HomeProductResponseDto;
 import com.rabbuy.ecommerce.dto.ProductListDto;
 import com.rabbuy.ecommerce.service.OrderService;
 import com.rabbuy.ecommerce.service.ProductService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -89,7 +88,6 @@ public class HomeResource {
      */
     @GET
     @Path("/message")
-    @RolesAllowed({"admin", "customer"}) // (token_required)
     public Response getMessageCounts() {
         String currentUserId = securityContext.getUserPrincipal().getName();
         HomeMessageCountDto counts = orderService.getMessageCountsByUserId(currentUserId);

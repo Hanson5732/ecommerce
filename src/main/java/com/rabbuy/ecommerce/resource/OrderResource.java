@@ -3,7 +3,6 @@ package com.rabbuy.ecommerce.resource;
 import com.rabbuy.ecommerce.dto.*;
 import com.rabbuy.ecommerce.entity.OrderItem;
 import com.rabbuy.ecommerce.service.OrderService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -11,6 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.ForbiddenException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,6 @@ import java.util.Map;
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RolesAllowed({"admin", "customer"})
 public class OrderResource {
 
     @Inject
@@ -152,11 +151,14 @@ public class OrderResource {
      */
     @GET
     @Path("/admin/list")
-    @RolesAllowed("admin") //
     public Response getAdminOrdersList(
             @QueryParam("itemStatus") String itemStatus,
             @QueryParam("page") @DefaultValue("1") int page,
             @QueryParam("page_size") @DefaultValue("10") int pageSize) {
+
+        if (!securityContext.isUserInRole("admin")) {
+            throw new ForbiddenException("Administrator access required.");
+        }
 
         PaginatedResult<OrderListDto> results = orderService.getAdminOrdersList(itemStatus, page, pageSize);
 
@@ -176,8 +178,11 @@ public class OrderResource {
      */
     @GET
     @Path("/admin/detail")
-    @RolesAllowed("admin") //
     public Response getAdminOrderDetail(@QueryParam("id") String orderId) {
+        if (!securityContext.isUserInRole("admin")) {
+            throw new ForbiddenException("Administrator access required.");
+        }
+
         if (orderId == null) {
             throw new WebApplicationException("Query parameter 'id' is required.", Response.Status.BAD_REQUEST);
         }
@@ -193,8 +198,11 @@ public class OrderResource {
      */
     @PUT
     @Path("/admin/item/update")
-    @RolesAllowed("admin") //
     public Response updateAdminItemStatus(AdminOrderItemStatusUpdateDto updateDto) {
+        if (!securityContext.isUserInRole("admin")) {
+            throw new ForbiddenException("Administrator access required.");
+        }
+
         if (updateDto.itemId() == null || updateDto.status() == null) {
             throw new WebApplicationException("Request body must contain 'itemId' and 'status'.", Response.Status.BAD_REQUEST);
         }

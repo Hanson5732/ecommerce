@@ -1,7 +1,6 @@
 package com.rabbuy.ecommerce.resource;
 
 import com.rabbuy.ecommerce.dto.*;
-import jakarta.annotation.security.RolesAllowed;
 import com.rabbuy.ecommerce.service.ProductService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -10,6 +9,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.ForbiddenException;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -112,8 +112,11 @@ public class ProductResource {
      */
     @GET
     @Path("/stock-count")
-    @RolesAllowed("admin") //
     public Response getStockStatus() {
+        if (!securityContext.isUserInRole("admin")) {
+            throw new ForbiddenException("Administrator access required.");
+        }
+
         ProductStockStatus status = productService.getProductStockStatus();
         return Response.ok(ApiResponseDto.success(status)).build();
     }
@@ -126,11 +129,14 @@ public class ProductResource {
      */
     @GET
     @Path("/list")
-    @RolesAllowed("admin") //
     public Response getAdminProductList(
             @QueryParam("q") @DefaultValue("") String query,
             @QueryParam("page") @DefaultValue("1") int page,
             @QueryParam("pageSize") @DefaultValue("10") int pageSize) {
+
+        if (!securityContext.isUserInRole("admin")) {
+            throw new ForbiddenException("Administrator access required.");
+        }
 
         PaginatedResult<ProductAdminListDto> result = productService.getAdminProductList(query, page, pageSize);
 
@@ -150,8 +156,11 @@ public class ProductResource {
      */
     @GET
     @Path("/admin/{id}")
-    @RolesAllowed("admin") //
     public Response getAdminProductDetail(@PathParam("id") String productId) {
+        if (!securityContext.isUserInRole("admin")) {
+            throw new ForbiddenException("Administrator access required.");
+        }
+
         ProductDetailDto productDetail = productService.getAdminProductDetails(productId);
         return Response.ok(ApiResponseDto.success(productDetail)).build();
     }
@@ -164,8 +173,11 @@ public class ProductResource {
      */
     @POST
     @Path("/add")
-    @RolesAllowed("admin") //
     public Response addProduct(ProductAdminInputDto dto) {
+        if (!securityContext.isUserInRole("admin")) {
+            throw new ForbiddenException("Administrator access required.");
+        }
+
         ProductDetailDto newProduct = productService.addProduct(dto);
         // Django 视图 返回 {'id': ...}
         Map<String, String> response = new HashMap<>();
@@ -181,8 +193,11 @@ public class ProductResource {
      */
     @PUT
     @Path("/update/{id}")
-    @RolesAllowed("admin") //
     public Response updateProduct(@PathParam("id") String productId, ProductAdminInputDto dto) {
+        if (!securityContext.isUserInRole("admin")) {
+            throw new ForbiddenException("Administrator access required.");
+        }
+
         productService.updateProduct(productId, dto);
         return Response.ok(ApiResponseDto.success()).build();
     }
@@ -195,8 +210,11 @@ public class ProductResource {
      */
     @DELETE // 使用 DELETE 动词
     @Path("/delete/{id}")
-    @RolesAllowed("admin") //
     public Response deleteProduct(@PathParam("id") String productId) {
+        if (!securityContext.isUserInRole("admin")) {
+            throw new ForbiddenException("Administrator access required.");
+        }
+
         productService.deleteProduct(productId);
         return Response.ok(ApiResponseDto.success()).build();
     }

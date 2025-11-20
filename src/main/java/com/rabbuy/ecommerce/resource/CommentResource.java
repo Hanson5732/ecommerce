@@ -2,7 +2,6 @@ package com.rabbuy.ecommerce.resource;
 
 import com.rabbuy.ecommerce.dto.*;
 import com.rabbuy.ecommerce.service.CommentService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -53,7 +52,6 @@ public class CommentResource {
      */
     @POST
     @Path("/add")
-    @RolesAllowed({"admin", "customer"}) // (@token_required)
     public Response addComment(CommentAddDto commentDto) {
         // 异常 (NotFound) 将被 GlobalExceptionMapper 捕获
         CommentResponseDto newComment = commentService.addComment(commentDto);
@@ -82,7 +80,6 @@ public class CommentResource {
      */
     @PUT
     @Path("/update")
-    @RolesAllowed({"admin", "customer"}) // (@token_required)
     public Response updateComment(CommentUpdateInputDto updateInputDto) {
         // 验证 ID 是否在请求体中
         if (updateInputDto.id() == null || updateInputDto.id().isEmpty()) {
@@ -100,7 +97,6 @@ public class CommentResource {
      */
     @DELETE
     @Path("/delete")
-    @RolesAllowed({"admin", "customer"})
     public Response deleteComment(CommentDeleteDto deleteDto) {
         if (deleteDto == null || deleteDto.id() == null || deleteDto.id().isEmpty()) {
             throw new WebApplicationException("Request body with 'id' is required.", Response.Status.BAD_REQUEST);

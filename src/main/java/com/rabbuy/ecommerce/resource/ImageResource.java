@@ -3,7 +3,6 @@ package com.rabbuy.ecommerce.resource;
 import com.rabbuy.ecommerce.dto.ApiResponseDto;
 import com.rabbuy.ecommerce.dto.ImageUploadResponseDto;
 import com.rabbuy.ecommerce.service.ImageService;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
@@ -17,7 +16,6 @@ import java.io.IOException;
 
 @Path("/image")
 @ApplicationScoped
-@RolesAllowed({"admin", "customer"})
 public class ImageResource {
 
     @Inject

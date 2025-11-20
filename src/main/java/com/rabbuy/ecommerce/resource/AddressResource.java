@@ -4,7 +4,6 @@ import com.rabbuy.ecommerce.dto.AddressDto;
 import com.rabbuy.ecommerce.dto.AddressInputDto;
 import com.rabbuy.ecommerce.service.AddressService;
 import com.rabbuy.ecommerce.dto.ApiResponseDto;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -18,7 +17,6 @@ import jakarta.ws.rs.core.Context;
 @ApplicationScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@RolesAllowed({"admin", "customer"}) // ** 保护此资源下的所有端点 **
 public class AddressResource {
 
     @Inject
