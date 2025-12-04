@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE payara-web-app PUBLIC "-//Payara.fish//DTD Payara Server 6.31.0//EN" "https://raw.githubusercontent.com/payara/Payara-Documentation/main-6/docs/modules/ROOT/pages/Appendix/Schemas/payara-web-app_4.dtd">
+
+<payara-web-app>
+
+    <context-root>/</context-root>
+
+    <session-config>
+        <session-manager/>
+    </session-config>
+    <resource-ref>
+        <res-ref-name>mail/Session</res-ref-name>
+        <jndi-name>mail/Session</jndi-name>
+    </resource-ref>
+    <jsp-config/>
+
+    <property
+            name="alternatedocroot_1"
+            value="from=/media/* dir=D:/Code/Java"
+    />
+
+</payara-web-app>
